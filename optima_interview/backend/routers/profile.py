@@ -1,6 +1,8 @@
+import io
 import os
-import shutil
-from pathlib import Path
+import mimetypes
+
+import httpx
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 
@@ -11,36 +13,66 @@ import auth as auth_utils
 
 router = APIRouter(prefix="/profile", tags=["profile"])
 
-UPLOAD_DIR = Path(__file__).parent.parent / "uploads"
-AVATAR_DIR = UPLOAD_DIR / "avatars"
-RESUME_DIR = UPLOAD_DIR / "resumes"
+BLOB_TOKEN = os.getenv("BLOB_READ_WRITE_TOKEN")
+BLOB_API_URL = "https://blob.vercel-storage.com"
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 ALLOWED_RESUME_TYPES = {"application/pdf"}
 
 
-def _extract_resume_text(file_path: Path, content_type: str) -> str:
-    """Extract text from an uploaded resume file."""
+def _upload_to_blob(file_content: bytes, pathname: str, content_type: str) -> str:
+    """Upload bytes to Vercel Blob and return the public CDN URL."""
+    if not BLOB_TOKEN:
+        raise HTTPException(status_code=503, detail="Blob storage not configured")
+    response = httpx.put(
+        f"{BLOB_API_URL}/{pathname}",
+        content=file_content,
+        headers={
+            "authorization": f"Bearer {BLOB_TOKEN}",
+            "x-api-version": "7",
+            "content-type": content_type,
+            "x-add-random-suffix": "0",
+        },
+        timeout=30.0,
+    )
+    if response.status_code not in (200, 201):
+        raise HTTPException(status_code=502, detail=f"Blob upload failed: {response.text}")
+    return response.json()["url"]
+
+
+def _delete_from_blob(url: str) -> None:
+    """Delete a blob by its public URL. Silently ignores errors."""
+    if not BLOB_TOKEN or not url or "blob.vercel-storage.com" not in url:
+        return
+    try:
+        httpx.delete(
+            BLOB_API_URL,
+            headers={"authorization": f"Bearer {BLOB_TOKEN}", "x-api-version": "7"},
+            params={"url": url},
+            timeout=10.0,
+        )
+    except Exception:
+        pass
+
+
+def _extract_resume_text(file_content: bytes, content_type: str) -> str:
+    """Extract text from resume bytes."""
     if content_type == "text/plain":
-        return file_path.read_text(encoding="utf-8", errors="replace")
+        return file_content.decode("utf-8", errors="replace")
 
     if content_type == "application/pdf":
         try:
             import pdfplumber
-            with pdfplumber.open(str(file_path)) as pdf:
+            with pdfplumber.open(io.BytesIO(file_content)) as pdf:
                 return "\n".join(page.extract_text() or "" for page in pdf.pages)
-        except ImportError:
-            return ""
         except Exception:
             return ""
 
     if "wordprocessingml" in content_type:
         try:
             from docx import Document
-            doc = Document(str(file_path))
+            doc = Document(io.BytesIO(file_content))
             return "\n".join(p.text for p in doc.paragraphs)
-        except ImportError:
-            return ""
         except Exception:
             return ""
 
@@ -75,7 +107,7 @@ def update_my_profile(
 
 
 @router.post("/avatar", response_model=schemas.UserProfileOut)
-def upload_avatar(
+async def upload_avatar(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth_utils.get_current_user),
@@ -83,29 +115,27 @@ def upload_avatar(
     if file.content_type not in ALLOWED_IMAGE_TYPES:
         raise HTTPException(status_code=400, detail="Only JPEG, PNG, WebP, or GIF images are allowed")
 
-    AVATAR_DIR.mkdir(parents=True, exist_ok=True)
-
-    # Remove old avatar if exists
+    # Delete old avatar blob if it exists
     if current_user.profile_picture_url:
-        old_path = UPLOAD_DIR / current_user.profile_picture_url.lstrip("/uploads/").lstrip("uploads/")
-        if old_path.exists():
-            old_path.unlink()
+        _delete_from_blob(current_user.profile_picture_url)
 
-    ext = Path(file.filename).suffix or ".jpg"
-    filename = f"avatar_{current_user.id}{ext}"
-    file_path = AVATAR_DIR / filename
+    ext = mimetypes.guess_extension(file.content_type) or ".jpg"
+    if ext in (".jpe", ".jpeg"):
+        ext = ".jpg"
 
-    with file_path.open("wb") as f:
-        shutil.copyfileobj(file.file, f)
+    pathname = f"avatars/avatar_{current_user.id}{ext}"
+    file_content = await file.read()
 
-    current_user.profile_picture_url = f"/uploads/avatars/{filename}"
+    blob_url = _upload_to_blob(file_content, pathname, file.content_type)
+
+    current_user.profile_picture_url = blob_url
     db.commit()
     db.refresh(current_user)
     return schemas.UserProfileOut.model_validate(current_user)
 
 
 @router.post("/resume", response_model=schemas.UserProfileOut)
-def upload_resume(
+async def upload_resume(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth_utils.get_current_user),
@@ -113,18 +143,13 @@ def upload_resume(
     if file.content_type not in ALLOWED_RESUME_TYPES:
         raise HTTPException(status_code=400, detail="Only PDF resumes are allowed")
 
-    RESUME_DIR.mkdir(parents=True, exist_ok=True)
+    pathname = f"resumes/resume_{current_user.id}.pdf"
+    file_content = await file.read()
 
-    ext = Path(file.filename).suffix or ".pdf"
-    filename = f"resume_{current_user.id}{ext}"
-    file_path = RESUME_DIR / filename
+    blob_url = _upload_to_blob(file_content, pathname, file.content_type)
+    resume_text = _extract_resume_text(file_content, file.content_type)
 
-    with file_path.open("wb") as f:
-        shutil.copyfileobj(file.file, f)
-
-    resume_text = _extract_resume_text(file_path, file.content_type)
-
-    current_user.resume_filename = f"/uploads/resumes/{filename}"
+    current_user.resume_filename = blob_url
     current_user.resume_text = resume_text
     db.commit()
     db.refresh(current_user)

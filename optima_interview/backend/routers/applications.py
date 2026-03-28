@@ -1,6 +1,8 @@
-import shutil
-from pathlib import Path
+import io
+import os
 from typing import List
+
+import httpx
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
 from sqlalchemy.orm import Session
 
@@ -9,9 +11,31 @@ import models
 import schemas
 import auth as auth_utils
 
-APP_UPLOAD_DIR = Path(__file__).parent.parent / "uploads" / "applications"
-
 router = APIRouter(prefix="/applications", tags=["applications"])
+
+BLOB_TOKEN = os.getenv("BLOB_READ_WRITE_TOKEN")
+BLOB_API_URL = "https://blob.vercel-storage.com"
+
+
+def _upload_pdf_to_blob(file_content: bytes, app_id: int, kind: str) -> str:
+    """Upload a PDF to Vercel Blob and return the public CDN URL."""
+    if not BLOB_TOKEN:
+        raise HTTPException(status_code=503, detail="Blob storage not configured")
+    pathname = f"applications/{app_id}_{kind}.pdf"
+    response = httpx.put(
+        f"{BLOB_API_URL}/{pathname}",
+        content=file_content,
+        headers={
+            "authorization": f"Bearer {BLOB_TOKEN}",
+            "x-api-version": "7",
+            "content-type": "application/pdf",
+            "x-add-random-suffix": "0",
+        },
+        timeout=30.0,
+    )
+    if response.status_code not in (200, 201):
+        raise HTTPException(status_code=502, detail="Blob upload failed")
+    return response.json()["url"]
 
 
 @router.get("/mine", response_model=List[schemas.ApplicationOut])
@@ -200,26 +224,17 @@ def update_application_status(
     return {"ok": True, "status": new_status}
 
 
-def _save_application_pdf(file: UploadFile, app_id: int, kind: str) -> str:
-    """Save an uploaded PDF for an application, return the URL path."""
-    if file.content_type != "application/pdf":
-        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
-    APP_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-    filename = f"{app_id}_{kind}.pdf"
-    dest = APP_UPLOAD_DIR / filename
-    with dest.open("wb") as f:
-        shutil.copyfileobj(file.file, f)
-    return f"/uploads/applications/{filename}"
-
-
 @router.post("/{application_id}/upload-resume", response_model=schemas.ApplicationOut)
-def upload_tailored_resume(
+async def upload_tailored_resume(
     application_id: int,
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth_utils.require_candidate),
 ):
     """Candidate: upload a tailored resume PDF for an application."""
+    if file.content_type != "application/pdf":
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+
     app = db.query(models.Application).filter(
         models.Application.id == application_id,
         models.Application.candidate_user_id == current_user.id,
@@ -227,17 +242,17 @@ def upload_tailored_resume(
     if not app:
         raise HTTPException(status_code=404, detail="Application not found")
 
-    path = _save_application_pdf(file, application_id, "tailored_resume")
+    file_content = await file.read()
+    blob_url = _upload_pdf_to_blob(file_content, application_id, "tailored_resume")
 
-    # Extract text for ATS scoring
     try:
         import pdfplumber
-        with pdfplumber.open(str(APP_UPLOAD_DIR / f"{application_id}_tailored_resume.pdf")) as pdf:
+        with pdfplumber.open(io.BytesIO(file_content)) as pdf:
             text = "\n".join(page.extract_text() or "" for page in pdf.pages)
     except Exception:
         text = None
 
-    app.tailored_resume_filename = path
+    app.tailored_resume_filename = blob_url
     if text:
         app.tailored_resume_text = text
     db.commit()
@@ -250,13 +265,16 @@ def upload_tailored_resume(
 
 
 @router.post("/{application_id}/upload-cover", response_model=schemas.ApplicationOut)
-def upload_cover_letter(
+async def upload_cover_letter(
     application_id: int,
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth_utils.require_candidate),
 ):
     """Candidate: upload a cover letter PDF for an application."""
+    if file.content_type != "application/pdf":
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+
     app = db.query(models.Application).filter(
         models.Application.id == application_id,
         models.Application.candidate_user_id == current_user.id,
@@ -264,16 +282,17 @@ def upload_cover_letter(
     if not app:
         raise HTTPException(status_code=404, detail="Application not found")
 
-    path = _save_application_pdf(file, application_id, "cover_letter")
+    file_content = await file.read()
+    blob_url = _upload_pdf_to_blob(file_content, application_id, "cover_letter")
 
     try:
         import pdfplumber
-        with pdfplumber.open(str(APP_UPLOAD_DIR / f"{application_id}_cover_letter.pdf")) as pdf:
+        with pdfplumber.open(io.BytesIO(file_content)) as pdf:
             text = "\n".join(page.extract_text() or "" for page in pdf.pages)
     except Exception:
         text = None
 
-    app.cover_letter_filename = path
+    app.cover_letter_filename = blob_url
     if text:
         app.cover_letter_text = text
     db.commit()

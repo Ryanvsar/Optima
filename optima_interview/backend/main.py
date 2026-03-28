@@ -1,23 +1,25 @@
 import os
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
 from database import init_db
 from routers import auth, interviews, jobs, matches, profile, favourites, applications, tts
 
-UPLOAD_DIR = Path(__file__).parent / "uploads"
-
-# Create upload directories eagerly so StaticFiles mount succeeds at import time
-(UPLOAD_DIR / "avatars").mkdir(parents=True, exist_ok=True)
-(UPLOAD_DIR / "resumes").mkdir(parents=True, exist_ok=True)
-(UPLOAD_DIR / "applications").mkdir(parents=True, exist_ok=True)
+# ALLOWED_ORIGINS: comma-separated list of frontend origins, or "*" for local dev.
+# In production set this env var to your Vercel frontend URL, e.g.:
+#   ALLOWED_ORIGINS=https://optima-frontend.vercel.app
+_raw_origins = os.getenv("ALLOWED_ORIGINS", "*")
+if _raw_origins.strip() == "*":
+    allow_origins = ["*"]
+    allow_credentials = False
+else:
+    allow_origins = [o.strip() for o in _raw_origins.split(",")]
+    allow_credentials = True
 
 
 @asynccontextmanager
@@ -35,14 +37,13 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=allow_origins,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Serve uploaded files (avatars, resumes)
-app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
+# NOTE: /uploads StaticFiles mount removed — file uploads are served via Vercel Blob CDN
 
 app.include_router(auth.router)
 app.include_router(interviews.router)
