@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt==4.0.1
+anthropic
+openai
+python-multipart
+python-dotenv
+pydantic[email]
+pdfplumber
+python-docx

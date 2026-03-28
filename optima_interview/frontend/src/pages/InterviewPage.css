@@ -1,0 +1,554 @@
+.interview {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 100px 24px 60px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Session Banner ── */
+.session-banner {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.session-banner-connecting {
+  background: rgba(0, 212, 255, 0.06);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  color: var(--cyan);
+}
+
+.session-banner-mock {
+  background: rgba(139, 92, 246, 0.06);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.interview-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.interview-loading h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin: 0;
+}
+
+.interview-loading p {
+  font-size: 16px;
+  color: var(--text-3);
+  margin: 0;
+}
+
+.err-text {
+  color: #ff4d6a !important;
+}
+
+/* Loader spinner */
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Top bar: progress + timer */
+.interview-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+/* Timer */
+.timer {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  white-space: nowrap;
+  transition: all 0.3s;
+}
+
+.timer svg {
+  color: var(--text-3);
+  transition: color 0.3s;
+}
+
+.timer.warn {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.2);
+  background: rgba(251, 191, 36, 0.05);
+}
+
+.timer.warn svg {
+  color: #fbbf24;
+}
+
+.timer.danger {
+  color: #ff4d6a;
+  border-color: rgba(255, 77, 106, 0.25);
+  background: rgba(255, 77, 106, 0.06);
+  animation: timer-pulse 0.6s ease-in-out infinite;
+}
+
+.timer.danger svg {
+  color: #ff4d6a;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Progress */
+.interview-progress {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  border-radius: 2px;
+  transition: width 0.4s var(--ease-out);
+}
+
+.progress-text {
+  font-size: 13px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+/* Question card */
+.question-card {
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: fadeIn 0.35s var(--ease-out);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.question-meta {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.q-type {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.q-type.verbal {
+  color: var(--cyan);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.q-type.code {
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.08);
+}
+
+.q-industry {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--text-3);
+  background: var(--surface);
+}
+
+.q-time-limit {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--text-3);
+  background: var(--surface);
+  margin-left: auto;
+}
+
+/* Question text row — houses question + speaking indicator */
+.question-text-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.question-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 1.4;
+  margin: 0;
+  letter-spacing: -0.5px;
+  flex: 1;
+}
+
+/* ── Speaking / waveform indicator ── */
+.speaking-indicator {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  padding-top: 4px;
+  flex-shrink: 0;
+}
+
+.wave-bar {
+  display: block;
+  width: 3px;
+  border-radius: 2px;
+  background: rgba(0, 212, 255, 0.65);
+  animation: wave 0.9s ease-in-out infinite;
+}
+
+.wave-bar:nth-child(1) { animation-delay: 0s;    height: 6px; }
+.wave-bar:nth-child(2) { animation-delay: 0.15s; height: 12px; }
+.wave-bar:nth-child(3) { animation-delay: 0.3s;  height: 9px; }
+.wave-bar:nth-child(4) { animation-delay: 0.45s; height: 5px; }
+
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.4); }
+  50%       { transform: scaleY(1.0); }
+}
+
+/* ── Reading line (fills while TTS plays) ── */
+.reading-line {
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  margin-bottom: 20px;
+  animation: reading-fill 3s ease-out forwards;
+  transform-origin: left;
+}
+
+@keyframes reading-fill {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* ── Skip TTS button (fixed bottom-right) ── */
+.skip-tts-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  background: rgba(10, 10, 20, 0.8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text-2);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  animation: skip-in 0.2s var(--ease-out);
+}
+
+.skip-tts-btn:hover {
+  border-color: rgba(0, 212, 255, 0.5);
+  color: var(--cyan);
+  background: rgba(0, 212, 255, 0.06);
+}
+
+@keyframes skip-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.answer-input {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-1);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-height: 180px;
+}
+
+.answer-input::placeholder {
+  color: var(--text-3);
+}
+
+.answer-input:focus {
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.08);
+}
+
+.answer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 12px;
+}
+
+.word-count {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* ── Mic button ── */
+.mic-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-3);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mic-btn:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  color: var(--cyan);
+}
+
+.mic-btn.active {
+  border-color: rgba(255, 77, 106, 0.35);
+  background: rgba(255, 77, 106, 0.07);
+  color: #ff4d6a;
+}
+
+.mic-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff4d6a;
+  animation: mic-pulse 1s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes mic-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.75); }
+}
+
+/* Highlight textarea border while recording */
+.answer-input.recording {
+  border-color: rgba(255, 77, 106, 0.3);
+  box-shadow: 0 0 0 3px rgba(255, 77, 106, 0.07);
+}
+
+/* Navigation */
+.interview-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 16px;
+}
+
+.nav-dots {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.nav-dot.current {
+  border-color: var(--cyan);
+  background: var(--cyan);
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+}
+
+.nav-dot.past {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(52, 211, 153, 0.3);
+}
+
+.nav-dot.answered.current {
+  border-color: var(--cyan);
+  background: var(--cyan);
+}
+
+.submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Camera layout ── */
+
+/* Widen container when camera is active */
+.interview:has(.interview-body.camera-active) {
+  max-width: 1100px;
+}
+
+/* Two-column grid when camera on, single col otherwise */
+.interview-body {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.interview-body.camera-active {
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Camera pane */
+.camera-pane {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  position: sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.camera-feed {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  transform: scaleX(-1);
+  display: block;
+  background: #000;
+}
+
+.camera-toggle-btn {
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  transition: color 0.2s;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.camera-toggle-btn:hover {
+  color: var(--text-1);
+}
+
+/* Inline "Turn on camera" button above textarea */
+.camera-on-inline-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px dashed var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-3);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.camera-on-inline-btn:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  color: var(--cyan);
+}
+
+/* Responsive — stack on narrow screens */
+@media (max-width: 900px) {
+  .interview-body.camera-active {
+    grid-template-columns: 1fr;
+  }
+
+  .camera-pane {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .interview:has(.interview-body.camera-active) {
+    max-width: 780px;
+  }
+}
