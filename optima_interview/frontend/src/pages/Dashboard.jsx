@@ -102,6 +102,20 @@ function EmployerDashboard({ user }) {
               <span>Resume relevance to job requirements</span>
             </div>
           </div>
+          <div className="match-summary-item">
+            <span className="match-pct match-pct-bonus">+</span>
+            <div>
+              <strong>Role Preference Alignment</strong>
+              <span>Candidates who list your role type as a preferred position are ranked higher in your applicant list</span>
+            </div>
+          </div>
+          <div className="match-summary-item">
+            <span className="match-pct match-pct-bonus">+</span>
+            <div>
+              <strong>Interview Recency</strong>
+              <span>Connecting interviews from the past 7 days are prioritized, ensuring you see candidates at their current readiness level</span>
+            </div>
+          </div>
         </div>
 
         <p className="rubric-note-compact">

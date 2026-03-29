@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════════════
+   Dashboard — Light SaaS Theme
+   ═══════════════════════════════════════════════ */
+
 .dash {
   max-width: 800px;
   margin: 0 auto;
@@ -38,20 +42,26 @@
   align-items: center;
   gap: 14px;
   padding: 18px 20px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: border-color 0.2s, transform 0.15s, background 0.2s;
+  transition: border-color 0.25s var(--ease-out),
+              transform 0.2s var(--ease-out),
+              box-shadow 0.25s var(--ease-out);
   text-align: left;
   font-family: 'Inter', sans-serif;
   width: 100%;
 }
 
 .quick-card:hover {
-  border-color: rgba(0, 212, 255, 0.25);
-  background: rgba(0, 212, 255, 0.03);
-  transform: translateY(-1px);
+  border-color: var(--primary-200);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.quick-card:active {
+  transform: translateY(0);
 }
 
 .quick-card-icon {
@@ -87,21 +97,28 @@
   font-size: 16px;
   color: var(--text-3);
   flex-shrink: 0;
-  transition: color 0.2s;
+  transition: color 0.2s var(--ease-out),
+              transform 0.2s var(--ease-out);
 }
 
 .quick-card:hover .quick-card-arrow {
-  color: var(--cyan);
+  color: var(--primary-500);
+  transform: translateX(2px);
 }
 
+/* ── Main Card ── */
 .dash-card {
   padding: 36px;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 24px;
+  transition: box-shadow 0.25s var(--ease-out);
+}
+
+.dash-card:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .dash-card h2 {
@@ -123,6 +140,7 @@
   color: var(--text-2);
 }
 
+/* ── Start Form ── */
 .start-form {
   display: flex;
   flex-direction: column;
@@ -146,12 +164,13 @@
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   padding: 12px 16px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg);
   color: var(--text-1);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s var(--ease-out),
+              box-shadow 0.2s var(--ease-out);
 }
 
 .start-form input::placeholder {
@@ -159,10 +178,11 @@
 }
 
 .start-form input:focus {
-  border-color: rgba(0, 212, 255, 0.3);
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.08);
+  border-color: var(--primary-400);
+  box-shadow: 0 0 0 3px var(--primary-100);
 }
 
+/* ── Industry Buttons ── */
 .industry-grid {
   display: flex;
   flex-wrap: wrap;
@@ -174,23 +194,24 @@
   font-size: 13px;
   font-weight: 500;
   padding: 8px 16px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  background: transparent;
+  background: var(--bg);
   color: var(--text-3);
   cursor: pointer;
   transition: all 0.2s var(--ease-out);
 }
 
 .industry-btn.active {
-  border-color: rgba(0, 212, 255, 0.3);
-  background: rgba(0, 212, 255, 0.06);
-  color: var(--cyan);
+  border-color: var(--primary-300);
+  background: var(--primary-50);
+  color: var(--primary-600);
 }
 
 .industry-btn:hover:not(.active) {
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--gray-300);
   color: var(--text-2);
+  background: var(--gray-50);
 }
 
 .start-form .btn-primary {
@@ -202,7 +223,7 @@
   cursor: not-allowed;
 }
 
-/* Sessions list */
+/* ── Sessions List ── */
 .sessions-list {
   display: flex;
   flex-direction: column;
@@ -215,7 +236,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--surface);
   transition: all 0.2s var(--ease-out);
@@ -223,8 +244,9 @@
 }
 
 .session-row:hover {
-  border-color: var(--border-hover);
-  background: var(--surface-hover);
+  border-color: var(--primary-200);
+  background: var(--primary-50);
+  box-shadow: var(--shadow-sm);
 }
 
 .session-info {
@@ -260,7 +282,7 @@
   font-weight: 700;
 }
 
-/* Employer rubric compact */
+/* ── Employer Rubric Compact ── */
 .rubric-tiers-compact {
   display: flex;
   flex-direction: column;
@@ -273,9 +295,14 @@
   align-items: center;
   gap: 16px;
   padding: 12px 16px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--surface);
+  transition: background 0.2s var(--ease-out);
+}
+
+.tier-row:hover {
+  background: var(--gray-50);
 }
 
 .tier-badge {
@@ -283,7 +310,7 @@
   font-size: 13px;
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   border: 1px solid;
   white-space: nowrap;
   min-width: 70px;
@@ -306,10 +333,12 @@
   line-height: 1.4;
 }
 
+/* ── Wide Variant ── */
 .dash-wide {
   max-width: 860px;
 }
 
+/* ── Card Header Row ── */
 .card-header-row {
   display: flex;
   align-items: center;
@@ -326,20 +355,20 @@
   font-size: 13px;
   font-weight: 500;
   padding: 6px 14px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--cyan);
+  color: var(--primary-600);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s var(--ease-out);
 }
 
 .btn-ghost-sm:hover {
-  background: rgba(0, 212, 255, 0.06);
-  border-color: rgba(0, 212, 255, 0.2);
+  background: var(--primary-50);
+  border-color: var(--primary-200);
 }
 
-/* Match summary grid */
+/* ── Match Summary Grid ── */
 .match-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -352,17 +381,27 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--surface);
+  transition: box-shadow 0.2s var(--ease-out);
+}
+
+.match-summary-item:hover {
+  box-shadow: var(--shadow-sm);
 }
 
 .match-pct {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 20px;
   font-weight: 700;
-  color: var(--cyan);
+  color: var(--primary-600);
   min-width: 40px;
+}
+
+.match-pct-bonus {
+  color: #34d399;
+  font-size: 24px;
 }
 
 .match-summary-item strong {
@@ -376,7 +415,7 @@
   color: var(--text-3);
 }
 
-/* Grading bars */
+/* ── Grading Bars ── */
 .grading-bars {
   display: flex;
   flex-direction: column;
@@ -405,20 +444,20 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: var(--cyan);
+  color: var(--primary-600);
 }
 
 .grading-bar {
   width: 100%;
   height: 6px;
-  border-radius: 3px;
-  background: var(--border);
+  border-radius: var(--radius-full);
+  background: var(--gray-100);
   overflow: hidden;
 }
 
 .grading-bar-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: var(--radius-full);
   transition: width 0.5s var(--ease-out);
 }
 
@@ -427,17 +466,50 @@
   color: var(--text-3);
 }
 
+/* ── Rubric Note ── */
 .rubric-note-compact {
   font-size: 14px;
-  color: var(--text-3);
+  color: var(--text-2);
   line-height: 1.6;
   padding: 14px 18px;
-  border-radius: 10px;
-  background: rgba(167, 139, 250, 0.04);
-  border: 1px solid rgba(167, 139, 250, 0.1);
+  border-radius: var(--radius-md);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
   margin: 0;
 }
 
 .rubric-note-compact strong {
-  color: #a78bfa;
+  color: var(--primary-600);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .dash {
+    padding: 80px 16px 40px;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-card {
+    padding: 24px 20px;
+    border-radius: var(--radius-lg);
+  }
+
+  .match-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .tier-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }

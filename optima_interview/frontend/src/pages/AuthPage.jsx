@@ -1,9 +1,35 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { login, register } from '../api/client'
 import Navbar from '../components/Navbar'
 import './AuthPage.css'
+
+const LOCATIONS = [
+  // Canada — Major Cities
+  'Calgary, AB', 'Edmonton, AB', 'Red Deer, AB',
+  'Vancouver, BC', 'Burnaby, BC', 'Kelowna, BC', 'Richmond, BC', 'Surrey, BC', 'Victoria, BC',
+  'Winnipeg, MB',
+  'Fredericton, NB', 'Moncton, NB', 'Saint John, NB',
+  "St. John's, NL",
+  'Halifax, NS',
+  'Brampton, ON', 'Hamilton, ON', 'Kitchener, ON', 'London, ON', 'Markham, ON',
+  'Mississauga, ON', 'Ottawa, ON', 'Toronto, ON', 'Vaughan, ON', 'Windsor, ON',
+  'Charlottetown, PE',
+  'Gatineau, QC', 'Laval, QC', 'Montreal, QC', 'Quebec City, QC',
+  'Regina, SK', 'Saskatoon, SK',
+  // US — Major Cities
+  'Atlanta, GA', 'Austin, TX', 'Boston, MA', 'Charlotte, NC', 'Chicago, IL',
+  'Columbus, OH', 'Dallas, TX', 'Denver, CO', 'Detroit, MI', 'Fort Worth, TX',
+  'Houston, TX', 'Indianapolis, IN', 'Jacksonville, FL', 'Las Vegas, NV',
+  'Los Angeles, CA', 'Memphis, TN', 'Miami, FL', 'Minneapolis, MN', 'Nashville, TN',
+  'New Orleans, LA', 'New York, NY', 'Oklahoma City, OK', 'Orlando, FL',
+  'Philadelphia, PA', 'Phoenix, AZ', 'Portland, OR', 'Sacramento, CA',
+  'San Antonio, TX', 'San Diego, CA', 'San Francisco, CA', 'San Jose, CA',
+  'Seattle, WA', 'Tampa, FL', 'Washington, DC',
+  // Remote
+  'Remote', 'Hybrid',
+]
 
 export default function AuthPage() {
   const location = useLocation()
@@ -25,11 +51,44 @@ export default function AuthPage() {
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [locationSuggestions, setLocationSuggestions] = useState([])
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false)
+  const locationRef = useRef(null)
 
   // Sync role if URL param changes (e.g. navigating from landing page buttons)
   useEffect(() => {
     setForm((f) => ({ ...f, role: urlRole }))
   }, [urlRole])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (locationRef.current && !locationRef.current.contains(e.target)) {
+        setShowLocationDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleLocationInput = (e) => {
+    const val = e.target.value
+    setForm((f) => ({ ...f, company_location: val }))
+    if (val.length >= 1) {
+      const filtered = LOCATIONS.filter((l) =>
+        l.toLowerCase().includes(val.toLowerCase())
+      ).slice(0, 8)
+      setLocationSuggestions(filtered)
+      setShowLocationDropdown(filtered.length > 0)
+    } else {
+      setLocationSuggestions([])
+      setShowLocationDropdown(false)
+    }
+  }
+
+  const selectLocation = (loc) => {
+    setForm((f) => ({ ...f, company_location: loc }))
+    setShowLocationDropdown(false)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -158,12 +217,28 @@ export default function AuthPage() {
                 </label>
                 <label>
                   <span>Location</span>
-                  <input
-                    type="text"
-                    value={form.company_location}
-                    onChange={set('company_location')}
-                    placeholder="Toronto, ON"
-                  />
+                  <div className="location-wrap" ref={locationRef}>
+                    <input
+                      type="text"
+                      value={form.company_location}
+                      onChange={handleLocationInput}
+                      placeholder="Toronto, ON"
+                      autoComplete="off"
+                    />
+                    {showLocationDropdown && locationSuggestions.length > 0 && (
+                      <ul className="location-dropdown">
+                        {locationSuggestions.map((loc) => (
+                          <li
+                            key={loc}
+                            className="location-option"
+                            onMouseDown={() => selectLocation(loc)}
+                          >
+                            {loc}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </label>
               </>
             )}

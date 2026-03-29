@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { getMyProfile, updateMyProfile, uploadAvatar, uploadResume } from '../api/client'
 import Navbar from '../components/Navbar'
+import ImageCropModal from '../components/ImageCropModal'
 import './CandidateProfile.css'
 
 const TABS = ['Contact', 'About', 'Resume & Skills', 'Preferences']
@@ -72,6 +73,7 @@ export default function CandidateProfile() {
   const [saveMsg, setSaveMsg] = useState('')
   const [error, setError] = useState('')
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null)
+  const [cropImageSrc, setCropImageSrc] = useState(null)
   const avatarRef = useRef(null)
   const resumeRef = useRef(null)
 
@@ -109,6 +111,14 @@ export default function CandidateProfile() {
 
   const handleSave = async () => {
     setSaving(true); setError(''); setSaveMsg('')
+
+    if (!profile.pay_any && profile.pay_min && profile.pay_max &&
+        parseInt(profile.pay_min) > parseInt(profile.pay_max)) {
+      setError('Minimum pay must be less than or equal to maximum pay.')
+      setSaving(false)
+      return
+    }
+
     try {
       const payload = {
         phone_number: profile.phone_number || null,
@@ -161,12 +171,21 @@ export default function CandidateProfile() {
     }
   }
 
-  const handleAvatarChange = async (e) => {
+  const handleAvatarSelect = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => setCropImageSrc(reader.result)
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
+
+  const handleCroppedUpload = async (croppedFile) => {
     try {
-      const updated = await uploadAvatar(file)
-      setProfile((p) => ({ ...p, profile_picture_url: updated.profile_picture_url }))
+      const updated = await uploadAvatar(croppedFile)
+      const url = updated.profile_picture_url
+      setProfile((p) => ({ ...p, profile_picture_url: url ? `${url}?t=${Date.now()}` : url }))
+      setCropImageSrc(null)
     } catch (err) {
       setError(err.message)
     }
@@ -197,12 +216,16 @@ export default function CandidateProfile() {
     }
   }
 
-  const avatarSrc = profile?.profile_picture_url
-    ? `http://localhost:8000${profile.profile_picture_url}`
-    : null
+  const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+  const resolveUrl = (url) => {
+    if (!url) return null
+    if (url.startsWith('http')) return url
+    return `${API}${url}`
+  }
 
-  const resumeDisplayUrl = pdfPreviewUrl
-    || (profile?.resume_filename ? `http://localhost:8000${profile.resume_filename}` : null)
+  const avatarSrc = resolveUrl(profile?.profile_picture_url)
+
+  const resumeDisplayUrl = pdfPreviewUrl || resolveUrl(profile?.resume_filename)
 
   if (!profile) {
     return (
@@ -247,16 +270,39 @@ export default function CandidateProfile() {
             <div className="profile-tab-content">
               <div className="avatar-section">
                 <div className="avatar-wrap">
-                  {avatarSrc
-                    ? <img src={avatarSrc} alt="Profile" className="avatar-img" />
-                    : <div className="avatar-placeholder">{user?.name?.[0] || '?'}</div>
-                  }
+                  <div className="avatar-container">
+                    {avatarSrc
+                      ? <img src={avatarSrc} alt="Profile" className="avatar-img" />
+                      : <div className="avatar-placeholder">{user?.name?.[0] || '?'}</div>
+                    }
+                    {avatarSrc && (
+                      <button
+                        className="avatar-edit-btn"
+                        type="button"
+                        onClick={() => avatarRef.current?.click()}
+                        title="Edit photo"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
                   <button className="avatar-upload-btn" type="button" onClick={() => avatarRef.current?.click()}>
-                    Upload Photo
+                    {avatarSrc ? 'Change Photo' : 'Upload Photo'}
                   </button>
-                  <input ref={avatarRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} />
+                  <input ref={avatarRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarSelect} />
                 </div>
               </div>
+              {cropImageSrc && (
+                <ImageCropModal
+                  imageSrc={cropImageSrc}
+                  onClose={() => setCropImageSrc(null)}
+                  onCropDone={handleCroppedUpload}
+                  shape="round"
+                />
+              )}
 
               <div className="form-grid">
                 <label className="form-label">

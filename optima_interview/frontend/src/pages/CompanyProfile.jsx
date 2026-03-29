@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { getMyProfile, updateMyProfile, uploadAvatar } from '../api/client'
 import Navbar from '../components/Navbar'
+import ImageCropModal from '../components/ImageCropModal'
 import './CompanyProfile.css'
 
 // ── Tag Input ─────────────────────────────────────────────────────────────────
@@ -60,6 +61,7 @@ export default function CompanyProfile() {
   // Save state
   const [savingInfo, setSavingInfo] = useState(false)
   const [infoMsg, setInfoMsg] = useState({ type: '', text: '' })
+  const [cropImageSrc, setCropImageSrc] = useState(null)
 
   useEffect(() => {
     getMyProfile()
@@ -79,16 +81,24 @@ export default function CompanyProfile() {
 
   const handleAvatarClick = () => avatarInputRef.current?.click()
 
-  const handleAvatarChange = async (e) => {
+  const handleAvatarSelect = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
-    try {
-      const res = await uploadAvatar(file)
-      setProfile((p) => ({ ...p, profile_picture_url: res.profile_picture_url }))
-    } catch {
-      // ignore silently
-    }
+    const reader = new FileReader()
+    reader.onload = () => setCropImageSrc(reader.result)
+    reader.readAsDataURL(file)
     e.target.value = ''
+  }
+
+  const handleCroppedUpload = async (croppedFile) => {
+    try {
+      const res = await uploadAvatar(croppedFile)
+      const url = res.profile_picture_url
+      setProfile((p) => ({ ...p, profile_picture_url: url ? `${url}?t=${Date.now()}` : url }))
+      setCropImageSrc(null)
+    } catch (err) {
+      showMsg(setInfoMsg, 'error', err.message || 'Failed to upload logo.')
+    }
   }
 
   const handleSaveInfo = async () => {
@@ -113,8 +123,9 @@ export default function CompanyProfile() {
     )
   }
 
+  const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
   const avatarUrl = profile?.profile_picture_url
-    ? `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/${profile.profile_picture_url}`
+    ? (profile.profile_picture_url.startsWith('http') ? profile.profile_picture_url : `${API}${profile.profile_picture_url}`)
     : null
 
   const initials = profile?.name
@@ -140,9 +151,17 @@ export default function CompanyProfile() {
           type="file"
           accept="image/*"
           ref={avatarInputRef}
-          onChange={handleAvatarChange}
+          onChange={handleAvatarSelect}
           style={{ display: 'none' }}
         />
+        {cropImageSrc && (
+          <ImageCropModal
+            imageSrc={cropImageSrc}
+            onClose={() => setCropImageSrc(null)}
+            onCropDone={handleCroppedUpload}
+            shape="rect"
+          />
+        )}
 
         {/* ── Company Info Section ── */}
         <div className="cp-card">
@@ -151,13 +170,28 @@ export default function CompanyProfile() {
           {/* Avatar */}
           <div className="cp-avatar-row">
             <div className="cp-avatar-wrap">
-              {avatarUrl ? (
-                <img src={avatarUrl} alt="Company logo" className="cp-avatar-img" />
-              ) : (
-                <div className="cp-avatar-placeholder">{initials}</div>
-              )}
+              <div className="cp-avatar-container">
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="Company logo" className="cp-avatar-img" />
+                ) : (
+                  <div className="cp-avatar-placeholder">{initials}</div>
+                )}
+                {avatarUrl && (
+                  <button
+                    className="cp-avatar-edit-btn"
+                    type="button"
+                    onClick={handleAvatarClick}
+                    title="Edit logo"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </button>
+                )}
+              </div>
               <button className="cp-avatar-btn" onClick={handleAvatarClick} type="button">
-                Upload Logo
+                {avatarUrl ? 'Change Logo' : 'Upload Logo'}
               </button>
             </div>
             <div className="cp-company-name-block">

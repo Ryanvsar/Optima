@@ -195,7 +195,17 @@ function LandingPage() {
     {
       icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></svg>,
       title: 'Compatibility Rankings',
-      desc: 'Companies see candidates ranked by a 4-factor compatibility score — interview performance, answer relevance, skills, and resume.',
+      desc: 'Companies see candidates ranked by a multi-factor compatibility score — interview performance, answer relevance, skills, and resume.',
+    },
+    {
+      icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></svg>,
+      title: 'Browse & Save Job Postings',
+      desc: 'Explore open roles from companies actively hiring on Optima. Save favourites to focus your next connecting interview on the jobs that excite you most.',
+    },
+    {
+      icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>,
+      title: 'Employer Hiring Dashboard',
+      desc: 'Post jobs, set required skills, and receive a ranked list of matched candidates automatically — no inbox flooded with unqualified applications.',
     },
   ]
 
@@ -270,9 +280,9 @@ function LandingPage() {
         <div className="stats reveal" style={{ '--d': '0.4s' }}>
           <div className="stat"><span className="stat-num stat-text">Weekly</span><span className="stat-label">Connecting Interviews</span></div>
           <div className="stat-div" />
-          <div className="stat"><span className="stat-num stat-text">4-Factor</span><span className="stat-label">Compatibility Score</span></div>
+          <div className="stat"><span className="stat-num stat-text">Multi-Factor</span><span className="stat-label">Compatibility Score</span></div>
           <div className="stat-div" />
-          <div className="stat"><span className="stat-num stat-text">Claude AI</span><span className="stat-label">Answer Evaluation</span></div>
+          <div className="stat"><span className="stat-num stat-text">Anthropic AI</span><span className="stat-label">Answer Evaluation</span></div>
         </div>
       </section>
 
