@@ -3,7 +3,7 @@
 **Live:** [optima-interview.vercel.app](https://optima-interview.vercel.app)
 **Repo:** [github.com/Ryanvsar/Optima](https://github.com/Ryanvsar/Optima)
 
-Optima replaces the traditional job application process with AI-scored interviews. Candidates complete a weekly connecting interview and are automatically matched to companies whose job postings fit their answers, skills, and resume — no cover letters, no cold applications. Companies receive a ranked list of compatible candidates without sifting through hundreds of unqualified submissions.
+Optima replaces the traditional job application process with AI-scored interviews. Candidates complete a weekly connecting interview and are automatically matched to companies whose job postings fit their answers, skills, and resume no cover letters, no cold applications. Companies receive a ranked list of compatible candidates without sifting through hundreds of unqualified submissions.
 
 ---
 
@@ -57,7 +57,6 @@ When a candidate completes a connecting interview, Anthropic's Claude API evalua
 | Profile Skills Match | 10% | Overlap between the candidate's listed skills and the job's required skills |
 | Resume ATS Score | 15% | How well the candidate's resume content aligns with the job description |
 | Role Preference Alignment | Bonus | Whether the candidate lists the job's role type as a preferred position |
-| Interview Recency | Bonus | Interviews completed in the past 7 days are prioritized |
 
 Only candidates who score **40% or above** appear in a company's applicant list. Candidates scoring **65%+** are considered strong fits; **80%+** are exceptional.
 
@@ -278,7 +277,7 @@ To deploy your own instance:
 
 ## Team Contributions
 
-### Ryan — Backend
+### Ryan Vandersar — Backend
 
 Ryan designed and built the entire server-side of the platform.
 
@@ -292,7 +291,7 @@ Ryan designed and built the entire server-side of the platform.
 - **Job postings API** — Full CRUD for job postings including candidate count enrichment, active/inactive toggling, and filtering
 - **Vercel deployment** — Configured the Python serverless function entry point, PostgreSQL connection pooling for serverless (`NullPool`), and production environment setup
 
-### Rahul — Frontend
+### Rahul Jindal — Frontend
 
 Rahul designed and built the entire client-side experience.
 
