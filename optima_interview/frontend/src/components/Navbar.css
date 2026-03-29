@@ -1,42 +1,54 @@
+/* Navbar now inherits .nav from App.css for positioning/backdrop */
+
+.nav-logo {
+  text-decoration: none;
+  color: var(--text-1);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .nav-center {
   display: flex;
-  gap: 28px;
+  gap: 8px;
 }
 
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .nav-link {
   font-size: 14px;
-  color: var(--text-3);
+  font-weight: 500;
+  color: var(--text-2);
   text-decoration: none;
-  transition: color 0.2s;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
 }
 
 .nav-link:hover {
   color: var(--text-1);
+  background: var(--gray-100);
 }
 
 .nav-user {
   font-size: 13px;
+  font-weight: 500;
   color: var(--text-2);
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--gray-100);
 }
 
-.nav-logo {
-  text-decoration: none;
-  color: var(--text-1);
-  font-family: 'EB Garamond', Georgia, serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+@media (max-width: 768px) {
+  .nav-center {
+    display: none;
+  }
 }

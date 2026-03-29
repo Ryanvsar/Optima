@@ -1,11 +1,13 @@
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from database import init_db
 from routers import auth, interviews, jobs, matches, profile, favourites, applications, tts
@@ -43,7 +45,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# NOTE: /uploads StaticFiles mount removed — file uploads are served via Vercel Blob CDN
+# Serve local uploads in development (when Vercel Blob is not configured)
+_uploads_dir = Path(__file__).resolve().parent / "uploads"
+if not os.getenv("BLOB_READ_WRITE_TOKEN") and _uploads_dir.is_dir():
+    app.mount("/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
 
 app.include_router(auth.router)
 app.include_router(interviews.router)

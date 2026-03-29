@@ -241,7 +241,6 @@
   background: var(--primary-50);
   color: var(--primary-600);
 }
-
 /* ── Mobile responsive ── */
 
 @media (max-width: 480px) {

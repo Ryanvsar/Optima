@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, field_validator, model_validator
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
@@ -117,6 +117,12 @@ class UserProfileUpdate(BaseModel):
     company_description: Optional[str] = None
     company_locations: Optional[List[str]] = None
 
+    @model_validator(mode="after")
+    def pay_min_lte_max(self):
+        if self.pay_min is not None and self.pay_max is not None and self.pay_min > self.pay_max:
+            raise ValueError("Minimum pay must be less than or equal to maximum pay")
+        return self
+
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -215,6 +221,7 @@ class JobCreate(BaseModel):
     industry: str
     description: Optional[str] = ""
     required_skills: Optional[List[str]] = []
+    location: Optional[str] = None
     location_type: Optional[str] = "hybrid"
     responsibilities: Optional[str] = None
     education_required: Optional[str] = None
@@ -228,6 +235,12 @@ class JobCreate(BaseModel):
     start_date: Optional[str] = None
     work_term: Optional[str] = None
 
+    @model_validator(mode="after")
+    def salary_min_lte_max(self):
+        if self.salary_min is not None and self.salary_max is not None and self.salary_min > self.salary_max:
+            raise ValueError("Minimum salary must be less than or equal to maximum salary")
+        return self
+
 
 class JobOut(BaseModel):
     id: int
@@ -236,6 +249,7 @@ class JobOut(BaseModel):
     industry: str
     description: Optional[str] = ""
     required_skills: Optional[List[str]]
+    location: Optional[str] = None
     location_type: str
     is_active: bool
     created_at: datetime
@@ -266,6 +280,7 @@ class JobUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     required_skills: Optional[List[str]] = None
+    location: Optional[str] = None
     location_type: Optional[str] = None
     is_active: Optional[bool] = None
     responsibilities: Optional[str] = None
@@ -279,6 +294,12 @@ class JobUpdate(BaseModel):
     specific_questions: Optional[List[str]] = None
     start_date: Optional[str] = None
     work_term: Optional[str] = None
+
+    @model_validator(mode="after")
+    def salary_min_lte_max(self):
+        if self.salary_min is not None and self.salary_max is not None and self.salary_min > self.salary_max:
+            raise ValueError("Minimum salary must be less than or equal to maximum salary")
+        return self
 
 
 # ── Favourites ────────────────────────────────────────────────────────────────

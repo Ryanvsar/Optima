@@ -70,6 +70,7 @@ function JobFormPanel({ industries, onClose, onCreated }) {
     education_required: '',
     experience_required: '',
     certifications_required: '',
+    location: '',
     location_type: '',
     salary_min: '',
     salary_max: '',
@@ -105,13 +106,19 @@ function JobFormPanel({ industries, onClose, onCreated }) {
       setError('Title, industry and location type are required.')
       return
     }
+    const minSal = form.salary_min ? parseInt(form.salary_min, 10) : null
+    const maxSal = form.salary_max ? parseInt(form.salary_max, 10) : null
+    if (minSal !== null && maxSal !== null && minSal > maxSal) {
+      setError('Minimum salary must be less than or equal to maximum salary.')
+      return
+    }
     setSaving(true)
     setError('')
     try {
       const payload = {
         ...form,
-        salary_min: form.salary_min ? parseInt(form.salary_min, 10) : null,
-        salary_max: form.salary_max ? parseInt(form.salary_max, 10) : null,
+        salary_min: minSal,
+        salary_max: maxSal,
         specific_questions: form.specific_questions.filter((q) => q.trim()),
         location_type: form.location_type.toLowerCase(),
       }
@@ -216,6 +223,17 @@ function JobFormPanel({ industries, onClose, onCreated }) {
             value={form.certifications_required}
             onChange={(e) => setField('certifications_required')(e.target.value)}
             placeholder="e.g. AWS Certified Developer (Preferred)"
+          />
+        </label>
+
+        {/* Location */}
+        <label className="form-label">
+          <span>Location</span>
+          <input
+            className="form-input"
+            value={form.location}
+            onChange={(e) => setField('location')(e.target.value)}
+            placeholder="e.g. New York, NY"
           />
         </label>
 
@@ -450,6 +468,7 @@ function JobCard({ job, onDeactivate, onReactivate, isPast }) {
               <button className="modal-close-btn" onClick={() => setShowDetail(false)}>×</button>
             </div>
             <div className="job-detail-badges">
+              {job.location && <span className="badge badge-meta">{job.location}</span>}
               {job.location_type && <span className={`badge badge-location badge-${job.location_type}`}>{job.location_type}</span>}
               {job.hours_type && <span className="badge badge-hours">{{ full_time: 'Full Time', part_time: 'Part Time', contract: 'Contract' }[job.hours_type]}</span>}
               {job.job_level && <span className="badge badge-level">{levelLabels[job.job_level]}</span>}

@@ -59,6 +59,9 @@ function JobCard({ job, isFavourited, onToggleFavourite, onMockInterview, onSele
       <h3 className="job-card-title">{job.title}</h3>
 
       <div className="job-card-badges">
+        {job.location && (
+          <span className="badge badge-meta">{job.location}</span>
+        )}
         {job.location_type && (
           <span className={`badge badge-location badge-${job.location_type}`}>
             {job.location_type.charAt(0).toUpperCase() + job.location_type.slice(1)}

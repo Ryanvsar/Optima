@@ -1,9 +1,18 @@
+/* ══════════════════════════════════════════════
+   JobPostingsPage — Light SaaS Theme
+   Uses global design tokens from index.css
+   ══════════════════════════════════════════════ */
+
+/* ── Page Layout ── */
 .jp-page {
   max-width: 1100px;
   margin: 0 auto;
   padding: 100px 24px 80px;
+  background: var(--bg);
+  min-height: 100vh;
 }
 
+/* ── Header ── */
 .jp-header {
   margin-bottom: 28px;
 }
@@ -21,9 +30,10 @@
   font-size: 15px;
   color: var(--text-3);
   margin: 0;
+  line-height: 1.6;
 }
 
-/* ── View Toggle ── */
+/* ── View Toggle (Tab system) ── */
 .jp-view-toggle {
   display: flex;
   gap: 4px;
@@ -43,7 +53,7 @@
   cursor: pointer;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
-  transition: color 0.2s, border-color 0.2s;
+  transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -54,19 +64,24 @@
   color: var(--text-2);
 }
 
+.jp-view-btn:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+}
+
 .jp-view-btn.active {
-  color: var(--cyan);
-  border-bottom-color: var(--cyan);
+  color: var(--primary-600);
+  border-bottom-color: var(--primary-600);
 }
 
 .fav-count-badge {
   font-size: 12px;
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 20px;
-  background: rgba(0, 212, 255, 0.12);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  color: var(--cyan);
+  border-radius: var(--radius-full);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  color: var(--primary-600);
   line-height: 1.4;
 }
 
@@ -77,9 +92,9 @@
   gap: 16px;
   margin-bottom: 28px;
   padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--gray-50);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
 }
 
 .filter-group {
@@ -107,26 +122,33 @@
   font-size: 13px;
   font-weight: 500;
   padding: 6px 14px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: transparent;
+  background: var(--surface);
   color: var(--text-3);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s var(--ease-out);
   white-space: nowrap;
 }
 
 .filter-btn:hover:not(.active) {
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--gray-300);
   color: var(--text-2);
+  background: var(--gray-100);
+}
+
+.filter-btn:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 1px;
 }
 
 .filter-btn.active {
-  border-color: rgba(0, 212, 255, 0.35);
-  background: rgba(0, 212, 255, 0.1);
-  color: var(--cyan);
+  border-color: var(--primary-400);
+  background: var(--primary-50);
+  color: var(--primary-600);
 }
 
+/* ── Salary filter ── */
 .filter-salary .salary-inputs {
   display: flex;
   align-items: center;
@@ -137,13 +159,13 @@
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface);
   color: var(--text-1);
   outline: none;
   width: 90px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
 }
 
 .salary-input::placeholder {
@@ -151,7 +173,8 @@
 }
 
 .salary-input:focus {
-  border-color: rgba(0, 212, 255, 0.3);
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-50);
 }
 
 .salary-dash {
@@ -159,6 +182,7 @@
   color: var(--text-3);
 }
 
+/* ── Text filter pair ── */
 .filter-text-pair {
   display: flex;
   gap: 12px;
@@ -175,13 +199,13 @@
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   padding: 7px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface);
   color: var(--text-1);
   outline: none;
   width: 130px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
 }
 
 .filter-text-input::placeholder {
@@ -189,10 +213,11 @@
 }
 
 .filter-text-input:focus {
-  border-color: rgba(0, 212, 255, 0.3);
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-50);
 }
 
-/* ── Loading / Empty ── */
+/* ── Loading / Empty States ── */
 .jp-loading,
 .jp-empty {
   text-align: center;
@@ -210,19 +235,24 @@
 
 /* ── Job Card ── */
 .job-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: border-color 0.2s, transform 0.15s;
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.25s var(--ease-out),
+    transform 0.2s var(--ease-out);
 }
 
 .job-card:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
+  border-color: var(--primary-200);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .job-card-top {
@@ -240,6 +270,7 @@
   text-transform: uppercase;
 }
 
+/* ── Heart / Favourite Button ── */
 .heart-btn {
   background: none;
   border: none;
@@ -248,7 +279,7 @@
   color: var(--text-3);
   padding: 2px 0;
   line-height: 1;
-  transition: color 0.2s, transform 0.2s;
+  transition: color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
   flex-shrink: 0;
   width: 32px;
   display: inline-flex;
@@ -257,12 +288,18 @@
 }
 
 .heart-btn:hover {
-  color: #ff4d6a;
+  color: var(--error);
   transform: scale(1.15);
 }
 
+.heart-btn:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 .heart-btn.active {
-  color: #ff4d6a;
+  color: var(--error);
   transform: scale(1.1);
 }
 
@@ -286,50 +323,50 @@
   font-size: 12px;
   font-weight: 500;
   padding: 3px 10px;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   white-space: nowrap;
 }
 
 .badge-location {
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.25);
-  color: #a78bfa;
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  color: var(--primary-600);
 }
 
 .badge-location.badge-remote {
-  background: rgba(52, 211, 153, 0.08);
-  border-color: rgba(52, 211, 153, 0.2);
-  color: #34d399;
+  background: #F0FDFA;
+  border-color: #99F6E4;
+  color: var(--accent-500);
 }
 
 .badge-location.badge-hybrid {
-  background: rgba(251, 191, 36, 0.08);
-  border-color: rgba(251, 191, 36, 0.2);
-  color: #fbbf24;
+  background: #FFFBEB;
+  border-color: #FDE68A;
+  color: #B45309;
 }
 
 .badge-location.badge-onsite {
-  background: rgba(139, 92, 246, 0.1);
-  border-color: rgba(139, 92, 246, 0.25);
-  color: #a78bfa;
+  background: var(--primary-50);
+  border-color: var(--primary-200);
+  color: var(--primary-600);
 }
 
 .badge-hours {
-  background: rgba(0, 212, 255, 0.08);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  color: var(--cyan);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  color: var(--primary-500);
 }
 
 .badge-level {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--gray-100);
   border: 1px solid var(--border);
   color: var(--text-2);
 }
 
 .badge-salary {
-  background: rgba(52, 211, 153, 0.08);
-  border: 1px solid rgba(52, 211, 153, 0.2);
-  color: #34d399;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #059669;
 }
 
 /* ── Skill Chips ── */
@@ -342,16 +379,17 @@
 .skill-chip {
   font-size: 12px;
   padding: 3px 10px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  color: var(--text-2);
+  border-radius: var(--radius-sm);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  color: var(--primary-600);
   white-space: nowrap;
 }
 
 .skill-chip.skill-more {
   color: var(--text-3);
-  border-style: dashed;
+  background: var(--gray-50);
+  border: 1px dashed var(--gray-300);
 }
 
 /* ── Card Description ── */
@@ -378,7 +416,7 @@
   gap: 20px;
 }
 
-/* ── Interview action bar (bottom of favourites) ── */
+/* ── Interview Action Bar ── */
 .fav-interview-bar {
   display: flex;
   align-items: center;
@@ -386,9 +424,10 @@
   gap: 16px;
   flex-wrap: wrap;
   padding: 18px 20px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
   margin-top: 4px;
 }
 
@@ -415,24 +454,33 @@
   flex-shrink: 0;
 }
 
-/* ── Shared interview button base ── */
+/* ── Interview Button Base ── */
 .btn-interview {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 600;
   padding: 11px 22px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s;
+  transition:
+    opacity 0.2s var(--ease-out),
+    transform 0.15s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
   position: relative;
   overflow: hidden;
   white-space: nowrap;
 }
 
 .btn-interview:not(:disabled):hover {
-  opacity: 0.88;
+  opacity: 0.92;
   transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-interview:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
 }
 
 .btn-interview.disabled,
@@ -442,15 +490,13 @@
   transform: none;
 }
 
-/* Connecting = red */
 .btn-connect {
-  background: linear-gradient(135deg, #ff4d6a, #c0392b);
+  background: var(--error);
   color: #fff;
 }
 
-/* Mock = cyan/purple gradient (same visual weight as connect) */
 .btn-mock {
-  background: linear-gradient(135deg, var(--cyan, #00d4ff), var(--purple, #7c3aed));
+  background: var(--primary-600);
   color: #fff;
 }
 
@@ -467,14 +513,18 @@
   justify-content: space-between;
   gap: 16px;
   padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  transition: border-color 0.2s;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
 }
 
 .fav-card:hover {
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary-200);
+  box-shadow: var(--shadow-sm);
 }
 
 .fav-card-info {
@@ -514,19 +564,24 @@
   font-size: 13px;
   font-weight: 500;
   padding: 6px 14px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 77, 106, 0.2);
-  background: rgba(255, 77, 106, 0.05);
-  color: #ff4d6a;
+  border-radius: var(--radius-sm);
+  border: 1px solid #FCA5A5;
+  background: #FEF2F2;
+  color: var(--error);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s var(--ease-out);
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 .fav-remove-btn:hover {
-  border-color: rgba(255, 77, 106, 0.4);
-  background: rgba(255, 77, 106, 0.1);
+  border-color: var(--error);
+  background: #FEE2E2;
+}
+
+.fav-remove-btn:focus-visible {
+  outline: 2px solid var(--error);
+  outline-offset: 2px;
 }
 
 /* ── Toast ── */
@@ -535,44 +590,76 @@
   bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(30, 30, 40, 0.95);
+  background: var(--surface);
   border: 1px solid var(--border);
+  border-left: 4px solid var(--primary-500);
   color: var(--text-1);
   font-size: 14px;
   padding: 12px 20px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   z-index: 9999;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-lg);
   white-space: nowrap;
   max-width: calc(100vw - 48px);
   text-overflow: ellipsis;
   overflow: hidden;
+  animation: toast-in 0.3s var(--ease-out);
 }
 
-/* ── Mock Interview Modal ── */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ── Modal Overlay ── */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(15, 23, 42, 0.35);
   backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
+  animation: overlay-in 0.2s var(--ease-out);
 }
 
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Mock Interview Modal ── */
 .mock-modal {
-  background: var(--surface, #12121a);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   padding: 32px;
   width: 100%;
   max-width: 460px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-xl);
+  animation: modal-in 0.25s var(--ease-out);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .mock-modal-header {
@@ -598,13 +685,20 @@
   font-size: 24px;
   cursor: pointer;
   line-height: 1;
-  padding: 2px;
-  transition: color 0.2s;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: color 0.2s var(--ease-out), background 0.2s var(--ease-out);
   flex-shrink: 0;
 }
 
 .modal-close:hover {
   color: var(--text-1);
+  background: var(--gray-100);
+}
+
+.modal-close:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
 }
 
 .mock-modal-desc {
@@ -628,7 +722,7 @@
   border-top: 1px solid var(--border);
 }
 
-/* ── Shared form elements (reuse from CandidateProfile) ── */
+/* ── Form Elements ── */
 .form-label {
   display: flex;
   flex-direction: column;
@@ -645,12 +739,14 @@
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface);
   color: var(--text-1);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
   width: 100%;
   box-sizing: border-box;
 }
@@ -660,36 +756,40 @@
 }
 
 .form-input:focus {
-  border-color: rgba(0, 212, 255, 0.3);
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.08);
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-50);
 }
 
 .form-input:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+  background: var(--gray-50);
 }
 
 .form-select {
   appearance: none;
   cursor: pointer;
   padding-right: 32px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
 }
 
-/* ── Primary button (if not globally defined) ── */
+/* ── Primary Button ── */
 .btn-primary {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 600;
   padding: 10px 20px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: none;
-  background: linear-gradient(135deg, var(--cyan, #00d4ff), var(--purple, #7c3aed));
+  background: var(--primary-600);
   color: #fff;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s;
+  transition:
+    background 0.2s var(--ease-out),
+    transform 0.15s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
   position: relative;
   overflow: hidden;
   white-space: nowrap;
@@ -701,81 +801,59 @@
 }
 
 .btn-primary:not(:disabled):hover {
-  opacity: 0.9;
+  background: var(--primary-700);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
 }
 
 .btn-shimmer {
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
   transform: translateX(-100%);
-  transition: transform 0.5s;
+  transition: transform 0.5s var(--ease-out);
 }
 
 .btn-primary:not(:disabled):hover .btn-shimmer {
   transform: translateX(100%);
 }
 
+/* ── Ghost Button ── */
 .btn-ghost-sm {
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 500;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: transparent;
+  background: var(--surface);
   color: var(--text-2);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s var(--ease-out);
   white-space: nowrap;
 }
 
 .btn-ghost-sm:hover {
-  border-color: rgba(0, 212, 255, 0.3);
-  color: var(--cyan);
+  border-color: var(--gray-300);
+  color: var(--primary-600);
+  background: var(--gray-50);
 }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  .jobs-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .jp-filters {
-    flex-direction: column;
-  }
-
-  .fav-interview-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .fav-interview-btns {
-    flex-direction: column;
-  }
-
-  .btn-interview {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .jp-page {
-    padding: 90px 16px 60px;
-  }
-
-  .mock-modal {
-    padding: 24px 20px;
-  }
+.btn-ghost-sm:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
 }
 
 /* ── Job Detail Modal ── */
 .job-detail-modal {
-  background: var(--surface, #12121a);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   padding: 36px 40px;
   width: 100%;
   max-width: 640px;
@@ -784,7 +862,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-xl);
   animation: modal-in 0.25s var(--ease-out);
 }
 
@@ -844,8 +922,8 @@
   flex-direction: column;
   gap: 3px;
   padding: 12px 16px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  background: var(--gray-50);
   border: 1px solid var(--border);
 }
 
@@ -930,13 +1008,68 @@
 }
 
 .btn-unfav {
-  background: rgba(255, 77, 106, 0.08) !important;
-  border-color: rgba(255, 77, 106, 0.3) !important;
-  color: #ff4d6a !important;
+  background: #FEF2F2 !important;
+  border-color: #FCA5A5 !important;
+  color: var(--error) !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jp-filters {
+    flex-direction: column;
+  }
+
+  .fav-interview-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fav-interview-btns {
+    flex-direction: column;
+  }
+
+  .btn-interview {
+    width: 100%;
+    text-align: center;
+  }
+
+  .fav-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .fav-remove-btn {
+    align-self: flex-end;
+  }
 }
 
 @media (max-width: 480px) {
+  .jp-page {
+    padding: 90px 16px 60px;
+  }
+
+  .jp-header h1 {
+    font-size: 26px;
+  }
+
+  .mock-modal {
+    padding: 24px 20px;
+  }
+
   .job-detail-modal {
     padding: 24px 20px;
+  }
+
+  .jdm-title {
+    font-size: 19px;
+  }
+
+  .jdm-details-row {
+    grid-template-columns: 1fr 1fr;
   }
 }

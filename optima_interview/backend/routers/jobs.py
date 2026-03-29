@@ -54,6 +54,7 @@ def create_job(
         industry=payload.industry,
         description=payload.description,
         required_skills=payload.required_skills or [],
+        location=payload.location,
         location_type=payload.location_type or "hybrid",
         responsibilities=payload.responsibilities,
         education_required=payload.education_required,
