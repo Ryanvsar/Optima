@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════════════
+   GradingRubric — Light SaaS Theme
+   ═══════════════════════════════════════════════ */
+
 .rubric {
   max-width: 820px;
   margin: 0 auto;
@@ -6,6 +10,7 @@
   z-index: 2;
 }
 
+/* Header */
 .rubric-header {
   margin-bottom: 56px;
 }
@@ -26,6 +31,7 @@
   margin: 0;
 }
 
+/* Sections */
 .rubric-section {
   margin-bottom: 56px;
 }
@@ -50,19 +56,20 @@
   color: var(--text-1);
 }
 
+/* Note callout */
 .rubric-note {
   font-size: 15px;
   color: var(--text-2);
   line-height: 1.6;
   margin: 0 0 24px;
   padding: 16px 20px;
-  border-radius: 12px;
-  background: rgba(167, 139, 250, 0.05);
-  border: 1px solid rgba(167, 139, 250, 0.12);
+  border-radius: var(--radius-lg);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
 }
 
 .rubric-note strong {
-  color: #a78bfa;
+  color: var(--primary-600);
 }
 
 /* Criteria */
@@ -74,9 +81,16 @@
 
 .criteria-card {
   padding: 24px;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.criteria-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-hover);
 }
 
 .criteria-top {
@@ -98,10 +112,10 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: var(--cyan);
+  color: var(--primary-600);
   padding: 4px 10px;
-  border-radius: 6px;
-  background: rgba(0, 212, 255, 0.06);
+  border-radius: var(--radius-sm);
+  background: var(--primary-50);
 }
 
 .criteria-card p {
@@ -122,13 +136,15 @@
   display: flex;
   gap: 24px;
   padding: 24px;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--surface);
-  transition: border-color 0.2s;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
 }
 
 .tier-card:hover {
+  box-shadow: var(--shadow-sm);
   border-color: var(--border-hover);
 }
 
@@ -144,7 +160,7 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 16px;
   font-weight: 700;
-  color: var(--tc);
+  color: var(--primary-600);
   white-space: nowrap;
 }
 
@@ -153,8 +169,8 @@
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--tc);
-  opacity: 0.7;
+  color: var(--primary-500);
+  opacity: 0.8;
 }
 
 .tier-desc {
@@ -173,16 +189,23 @@
 
 .tip-card {
   padding: 24px;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.tip-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-hover);
 }
 
 .tip-num {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 32px;
   font-weight: 700;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(123, 47, 255, 0.25));
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -215,9 +238,16 @@
 
 .match-step {
   padding: 24px;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.match-step:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-hover);
 }
 
 .match-step-header {
@@ -235,10 +265,10 @@
   height: 28px;
   display: grid;
   place-items: center;
-  border-radius: 8px;
-  background: rgba(0, 212, 255, 0.08);
-  color: var(--cyan);
-  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: var(--radius-sm);
+  background: var(--primary-50);
+  color: var(--primary-600);
+  border: 1px solid var(--primary-200);
 }
 
 .match-step h3 {
@@ -264,16 +294,16 @@
 .formula-box {
   margin-top: 20px;
   padding: 20px 24px;
-  border-radius: 12px;
-  background: rgba(0, 212, 255, 0.03);
-  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
   font-size: 15px;
   color: var(--text-1);
   line-height: 1.6;
 }
 
 .formula-box strong {
-  color: var(--cyan);
+  color: var(--primary-600);
 }
 
 .formula-note {
@@ -292,9 +322,16 @@
 
 .usage-card {
   padding: 24px;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.usage-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-hover);
 }
 
 .usage-card h3 {
@@ -324,10 +361,17 @@
   justify-content: space-between;
   align-items: center;
   padding: 14px 18px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--shadow-xs);
   gap: 16px;
+  transition: box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.gen-row:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-hover);
 }
 
 .gen-row strong {
@@ -342,7 +386,7 @@
   text-align: right;
 }
 
-/* empty job positions page */
+/* Empty job positions page */
 .empty-page {
   max-width: 600px;
   margin: 0 auto;
@@ -367,7 +411,16 @@
   margin: 0;
 }
 
+/* Responsive */
 @media (max-width: 600px) {
+  .rubric {
+    padding: 80px 16px 40px;
+  }
+
+  .rubric-section {
+    margin-bottom: 40px;
+  }
+
   .tier-card {
     flex-direction: column;
     gap: 12px;
@@ -376,6 +429,11 @@
   .tier-left {
     flex-direction: row;
     gap: 8px;
+  }
+
+  .tips-grid,
+  .usage-grid {
+    grid-template-columns: 1fr;
   }
 
   .gen-row {

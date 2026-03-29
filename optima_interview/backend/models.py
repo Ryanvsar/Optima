@@ -102,6 +102,7 @@ class JobPosting(Base):
     industry = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     required_skills = Column(JSON, nullable=True)       # List[str]
+    location = Column(String, nullable=True)              # e.g. "New York, NY"
     location_type = Column(String, default="hybrid")    # "remote" | "hybrid" | "onsite"
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)

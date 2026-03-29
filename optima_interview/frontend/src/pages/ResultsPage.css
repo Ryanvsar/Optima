@@ -1,11 +1,18 @@
+/* ═══════════════════════════════════════════════
+   ResultsPage — Light SaaS Theme
+   Uses global design tokens from index.css
+   ═══════════════════════════════════════════════ */
+
+/* ── Container ── */
 .results {
   max-width: 800px;
   margin: 0 auto;
-  padding: 100px 24px 60px;
+  padding: 96px 24px 64px;
   position: relative;
   z-index: 2;
 }
 
+/* ── Loading / Connecting State ── */
 .results-loading {
   min-height: 100vh;
   display: flex;
@@ -17,17 +24,34 @@
   position: relative;
   z-index: 2;
   padding: 24px;
+  background: var(--bg);
 }
 
-/* ── Connecting done state ── */
+.results-loading h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.results-loading p {
+  color: var(--text-3);
+  font-size: 15px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── Connecting Done State ── */
 .connecting-done-icon {
   font-size: 48px;
   width: 80px;
   height: 80px;
-  border-radius: 50%;
-  background: rgba(52, 211, 153, 0.12);
-  border: 2px solid rgba(52, 211, 153, 0.3);
-  color: #34d399;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--success) 8%, transparent);
+  border: 2px solid color-mix(in srgb, var(--success) 25%, transparent);
+  color: var(--success);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,31 +75,22 @@
   margin-top: 8px;
 }
 
-.results-loading h2 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-1);
-  margin: 0;
-}
-
-.results-loading p {
-  color: var(--text-3);
-  margin: 0;
-}
-
-/* Header */
+/* ── Results Header ── */
 .results-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   padding: 32px 36px;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.25s var(--ease-out);
+}
+
+.results-header:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .results-header h1 {
@@ -84,7 +99,7 @@
   font-weight: 700;
   color: var(--text-1);
   margin: 0 0 4px;
-  letter-spacing: -1px;
+  letter-spacing: -0.75px;
 }
 
 .results-header p {
@@ -93,23 +108,26 @@
   margin: 0;
 }
 
+/* ── Overall Score Ring ── */
 .overall-score {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 80px;
   height: 80px;
-  border-radius: 50%;
-  border: 3px solid var(--sc, var(--cyan));
-  box-shadow: 0 0 20px color-mix(in srgb, var(--sc, var(--cyan)) 30%, transparent);
+  border-radius: var(--radius-full);
+  border: 3px solid var(--sc, var(--primary-500));
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--sc, var(--primary-500)) 10%, transparent);
+  transition: box-shadow 0.25s var(--ease-out);
 }
 
 .score-num {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 28px;
   font-weight: 700;
-  color: var(--sc, var(--cyan));
+  color: var(--sc, var(--primary-500));
   line-height: 1;
 }
 
@@ -118,27 +136,35 @@
   color: var(--text-3);
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: 500;
 }
 
-/* Question cards */
+/* ── Question Cards List ── */
 .results-questions {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* ── Individual Result Card ── */
 .result-card {
   padding: 28px 32px;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
-  transition: border-color 0.2s;
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
+  transition: border-color 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out),
+              transform 0.25s var(--ease-out);
 }
 
 .result-card:hover {
   border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
+/* Card top row */
 .result-top {
   display: flex;
   align-items: center;
@@ -154,26 +180,32 @@
 
 .result-q-num {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text-3);
+  background: var(--gray-100);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
 }
 
 .result-score {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 24px;
   font-weight: 700;
+  line-height: 1;
 }
 
+/* Question text */
 .result-question {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 17px;
   font-weight: 600;
   color: var(--text-1);
   margin: 0 0 16px;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
+/* Section labels */
 .result-label {
   display: block;
   font-size: 11px;
@@ -184,37 +216,40 @@
   margin-bottom: 6px;
 }
 
+/* Answer block */
 .result-answer {
   margin-bottom: 16px;
   padding: 14px 16px;
-  border-radius: 10px;
-  background: var(--surface);
+  border-radius: var(--radius-md);
+  background: var(--bg);
   border: 1px solid var(--border);
 }
 
 .result-answer p {
   font-size: 14px;
   color: var(--text-2);
-  line-height: 1.6;
+  line-height: 1.65;
   margin: 0;
   white-space: pre-wrap;
 }
 
+/* Feedback block */
 .result-feedback {
   margin-bottom: 16px;
   padding: 14px 16px;
-  border-radius: 10px;
-  background: rgba(0, 212, 255, 0.03);
-  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
 }
 
 .result-feedback p {
   font-size: 14px;
   color: var(--text-2);
-  line-height: 1.6;
+  line-height: 1.65;
   margin: 0;
 }
 
+/* Key points */
 .result-points {
   margin-bottom: 12px;
 }
@@ -229,32 +264,61 @@
   font-size: 12px;
   font-weight: 500;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s var(--ease-out);
 }
 
 .point-tag.hit {
-  color: #34d399;
-  background: rgba(52, 211, 153, 0.08);
-  border: 1px solid rgba(52, 211, 153, 0.15);
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
 }
 
 .point-tag.miss {
   color: var(--text-3);
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
 }
 
-/* Actions */
+/* ── Actions Footer ── */
 .results-actions {
-  margin-top: 32px;
+  margin-top: 36px;
   display: flex;
   justify-content: center;
+  gap: 12px;
 }
 
+/* ── Mobile Responsive ── */
 @media (max-width: 600px) {
+  .results {
+    padding: 80px 16px 48px;
+  }
+
   .results-header {
     flex-direction: column;
     gap: 20px;
     text-align: center;
+    padding: 24px 20px;
+  }
+
+  .results-header h1 {
+    font-size: 24px;
+  }
+
+  .result-card {
+    padding: 20px;
+  }
+
+  .result-question {
+    font-size: 15px;
+  }
+
+  .result-score {
+    font-size: 20px;
+  }
+
+  .results-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

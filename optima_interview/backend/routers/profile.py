@@ -1,6 +1,7 @@
 import io
 import os
 import mimetypes
+from pathlib import Path
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
@@ -15,44 +16,60 @@ router = APIRouter(prefix="/profile", tags=["profile"])
 
 BLOB_TOKEN = os.getenv("BLOB_READ_WRITE_TOKEN")
 BLOB_API_URL = "https://blob.vercel-storage.com"
+LOCAL_UPLOAD_DIR = Path(__file__).resolve().parent.parent / "uploads"
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 ALLOWED_RESUME_TYPES = {"application/pdf"}
 
 
-def _upload_to_blob(file_content: bytes, pathname: str, content_type: str) -> str:
-    """Upload bytes to Vercel Blob and return the public CDN URL."""
-    if not BLOB_TOKEN:
-        raise HTTPException(status_code=503, detail="Blob storage not configured")
-    response = httpx.put(
-        f"{BLOB_API_URL}/{pathname}",
-        content=file_content,
-        headers={
-            "authorization": f"Bearer {BLOB_TOKEN}",
-            "x-api-version": "7",
-            "content-type": content_type,
-            "x-add-random-suffix": "0",
-        },
-        timeout=30.0,
-    )
-    if response.status_code not in (200, 201):
-        raise HTTPException(status_code=502, detail=f"Blob upload failed: {response.text}")
-    return response.json()["url"]
-
-
-def _delete_from_blob(url: str) -> None:
-    """Delete a blob by its public URL. Silently ignores errors."""
-    if not BLOB_TOKEN or not url or "blob.vercel-storage.com" not in url:
-        return
-    try:
-        httpx.delete(
-            BLOB_API_URL,
-            headers={"authorization": f"Bearer {BLOB_TOKEN}", "x-api-version": "7"},
-            params={"url": url},
-            timeout=10.0,
+def _upload_file(file_content: bytes, pathname: str, content_type: str) -> str:
+    """Upload bytes to Vercel Blob (production) or local disk (dev). Returns public URL."""
+    if BLOB_TOKEN:
+        response = httpx.put(
+            f"{BLOB_API_URL}/{pathname}",
+            content=file_content,
+            headers={
+                "authorization": f"Bearer {BLOB_TOKEN}",
+                "x-api-version": "7",
+                "content-type": content_type,
+                "x-add-random-suffix": "0",
+            },
+            timeout=30.0,
         )
-    except Exception:
-        pass
+        if response.status_code not in (200, 201):
+            raise HTTPException(status_code=502, detail=f"Blob upload failed: {response.text}")
+        return response.json()["url"]
+
+    # Local fallback for development
+    local_path = LOCAL_UPLOAD_DIR / pathname
+    local_path.parent.mkdir(parents=True, exist_ok=True)
+    local_path.write_bytes(file_content)
+    return f"/uploads/{pathname}"
+
+
+def _delete_file(url: str) -> None:
+    """Delete a blob by its public URL, or a local file. Silently ignores errors."""
+    if not url:
+        return
+    # Vercel Blob
+    if BLOB_TOKEN and "blob.vercel-storage.com" in url:
+        try:
+            httpx.delete(
+                BLOB_API_URL,
+                headers={"authorization": f"Bearer {BLOB_TOKEN}", "x-api-version": "7"},
+                params={"url": url},
+                timeout=10.0,
+            )
+        except Exception:
+            pass
+        return
+    # Local file
+    if url.startswith("/uploads/"):
+        try:
+            local_path = LOCAL_UPLOAD_DIR / url.replace("/uploads/", "", 1)
+            local_path.unlink(missing_ok=True)
+        except Exception:
+            pass
 
 
 def _extract_resume_text(file_content: bytes, content_type: str) -> str:
@@ -115,9 +132,9 @@ async def upload_avatar(
     if file.content_type not in ALLOWED_IMAGE_TYPES:
         raise HTTPException(status_code=400, detail="Only JPEG, PNG, WebP, or GIF images are allowed")
 
-    # Delete old avatar blob if it exists
+    # Delete old avatar if it exists
     if current_user.profile_picture_url:
-        _delete_from_blob(current_user.profile_picture_url)
+        _delete_file(current_user.profile_picture_url)
 
     ext = mimetypes.guess_extension(file.content_type) or ".jpg"
     if ext in (".jpe", ".jpeg"):
@@ -126,9 +143,9 @@ async def upload_avatar(
     pathname = f"avatars/avatar_{current_user.id}{ext}"
     file_content = await file.read()
 
-    blob_url = _upload_to_blob(file_content, pathname, file.content_type)
+    url = _upload_file(file_content, pathname, file.content_type)
 
-    current_user.profile_picture_url = blob_url
+    current_user.profile_picture_url = url
     db.commit()
     db.refresh(current_user)
     return schemas.UserProfileOut.model_validate(current_user)
@@ -146,10 +163,10 @@ async def upload_resume(
     pathname = f"resumes/resume_{current_user.id}.pdf"
     file_content = await file.read()
 
-    blob_url = _upload_to_blob(file_content, pathname, file.content_type)
+    url = _upload_file(file_content, pathname, file.content_type)
     resume_text = _extract_resume_text(file_content, file.content_type)
 
-    current_user.resume_filename = blob_url
+    current_user.resume_filename = url
     current_user.resume_text = resume_text
     db.commit()
     db.refresh(current_user)

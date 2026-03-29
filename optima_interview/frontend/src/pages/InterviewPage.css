@@ -1,33 +1,41 @@
+/* ═══════════════════════════════════════════════
+   InterviewPage — Light SaaS Theme
+   Uses global design tokens from index.css
+   ═══════════════════════════════════════════════ */
+
+/* ── Page Container ── */
 .interview {
   max-width: 780px;
   margin: 0 auto;
-  padding: 100px 24px 60px;
+  padding: 96px 24px 60px;
   position: relative;
   z-index: 2;
 }
 
-/* ── Session Banner ── */
+/* ── Session Banners ── */
 .session-banner {
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 500;
   padding: 10px 16px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   margin-bottom: 20px;
   line-height: 1.5;
 }
 
 .session-banner-connecting {
-  background: rgba(0, 212, 255, 0.06);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  color: var(--cyan);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  color: var(--primary-600);
 }
 
 .session-banner-mock {
-  background: rgba(139, 92, 246, 0.06);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  color: #a78bfa;
+  background: #F5F3FF;
+  border: 1px solid #DDD6FE;
+  color: #7C3AED;
 }
 
+/* ── Loading State ── */
 .interview-loading {
   min-height: 100vh;
   display: flex;
@@ -38,6 +46,7 @@
   text-align: center;
   position: relative;
   z-index: 2;
+  background: var(--bg);
 }
 
 .interview-loading h2 {
@@ -55,25 +64,27 @@
 }
 
 .err-text {
-  color: #ff4d6a !important;
+  color: var(--error) !important;
 }
 
-/* Loader spinner */
+/* ── Loader Spinner ── */
 .loader {
   width: 40px;
   height: 40px;
-  border: 3px solid var(--border);
-  border-top-color: var(--cyan);
+  border: 3px solid var(--gray-200);
+  border-top-color: var(--primary-500);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 8px;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* Top bar: progress + timer */
+/* ── Top Bar: Progress + Timer ── */
 .interview-top {
   display: flex;
   align-items: center;
@@ -81,55 +92,56 @@
   margin-bottom: 32px;
 }
 
-/* Timer */
+/* ── Timer ── */
 .timer {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 18px;
   font-weight: 700;
-  color: var(--text-1);
+  color: var(--text-2);
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--surface);
   white-space: nowrap;
-  transition: all 0.3s;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.3s var(--ease-out);
 }
 
 .timer svg {
   color: var(--text-3);
-  transition: color 0.3s;
+  transition: color 0.3s var(--ease-out);
 }
 
 .timer.warn {
-  color: #fbbf24;
-  border-color: rgba(251, 191, 36, 0.2);
-  background: rgba(251, 191, 36, 0.05);
+  color: var(--warning);
+  border-color: rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.04);
 }
 
 .timer.warn svg {
-  color: #fbbf24;
+  color: var(--warning);
 }
 
 .timer.danger {
-  color: #ff4d6a;
-  border-color: rgba(255, 77, 106, 0.25);
-  background: rgba(255, 77, 106, 0.06);
-  animation: timer-pulse 0.6s ease-in-out infinite;
+  color: var(--error);
+  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.04);
+  animation: timer-pulse 2s ease-in-out infinite;
 }
 
 .timer.danger svg {
-  color: #ff4d6a;
+  color: var(--error);
 }
 
 @keyframes timer-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  50%      { opacity: 0.7; }
 }
 
-/* Progress */
+/* ── Progress ── */
 .interview-progress {
   display: flex;
   align-items: center;
@@ -140,42 +152,55 @@
 .progress-bar {
   flex: 1;
   height: 4px;
-  border-radius: 2px;
-  background: var(--border);
+  border-radius: var(--radius-full);
+  background: var(--gray-200);
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--cyan), var(--purple));
-  border-radius: 2px;
-  transition: width 0.4s var(--ease-out);
+  background: linear-gradient(90deg, var(--primary-500), var(--primary-400));
+  border-radius: var(--radius-full);
+  transition: width 0.5s var(--ease-out);
 }
 
 .progress-text {
   font-size: 13px;
   color: var(--text-3);
   white-space: nowrap;
+  font-weight: 500;
 }
 
-/* Question card */
+/* ── Question Card ── */
 .question-card {
   padding: 40px;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  animation: fadeIn 0.35s var(--ease-out);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.4s var(--ease-out);
+  transition: box-shadow 0.3s var(--ease-out);
+}
+
+.question-card:hover {
+  box-shadow: var(--shadow-md);
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
+/* ── Question Meta Badges ── */
 .question-meta {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 20px;
 }
@@ -183,46 +208,46 @@
 .q-type {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
 }
 
 .q-type.verbal {
-  color: var(--cyan);
-  background: rgba(0, 212, 255, 0.08);
+  color: var(--primary-600);
+  background: var(--primary-50);
 }
 
 .q-type.code {
-  color: #c084fc;
-  background: rgba(192, 132, 252, 0.08);
+  color: #7C3AED;
+  background: #F5F3FF;
 }
 
 .q-industry {
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   color: var(--text-3);
-  background: var(--surface);
+  background: var(--gray-100);
 }
 
 .q-time-limit {
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   color: var(--text-3);
-  background: var(--surface);
+  background: var(--gray-100);
   margin-left: auto;
 }
 
-/* Question text row — houses question + speaking indicator */
+/* ── Question Text ── */
 .question-text-row {
   display: flex;
   align-items: flex-start;
@@ -235,13 +260,13 @@
   font-size: 22px;
   font-weight: 600;
   color: var(--text-1);
-  line-height: 1.4;
+  line-height: 1.45;
   margin: 0;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.4px;
   flex: 1;
 }
 
-/* ── Speaking / waveform indicator ── */
+/* ── Speaking / Waveform Indicator ── */
 .speaking-indicator {
   display: flex;
   align-items: flex-end;
@@ -255,7 +280,7 @@
   display: block;
   width: 3px;
   border-radius: 2px;
-  background: rgba(0, 212, 255, 0.65);
+  background: var(--primary-400);
   animation: wave 0.9s ease-in-out infinite;
 }
 
@@ -266,14 +291,14 @@
 
 @keyframes wave {
   0%, 100% { transform: scaleY(0.4); }
-  50%       { transform: scaleY(1.0); }
+  50%      { transform: scaleY(1.0); }
 }
 
-/* ── Reading line (fills while TTS plays) ── */
+/* ── Reading Line (TTS progress) ── */
 .reading-line {
   height: 2px;
   border-radius: 1px;
-  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  background: linear-gradient(90deg, var(--primary-400), var(--primary-500));
   margin-bottom: 20px;
   animation: reading-fill 3s ease-out forwards;
   transform-origin: left;
@@ -284,7 +309,7 @@
   to   { width: 100%; }
 }
 
-/* ── Skip TTS button (fixed bottom-right) ── */
+/* ── Skip TTS Button ── */
 .skip-tts-btn {
   position: fixed;
   bottom: 32px;
@@ -294,24 +319,30 @@
   align-items: center;
   gap: 7px;
   padding: 10px 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 212, 255, 0.25);
-  background: rgba(10, 10, 20, 0.8);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
   color: var(--text-2);
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
-  animation: skip-in 0.2s var(--ease-out);
+  transition: border-color 0.25s var(--ease-out),
+              color 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out);
+  animation: skip-in 0.25s var(--ease-out);
 }
 
 .skip-tts-btn:hover {
-  border-color: rgba(0, 212, 255, 0.5);
-  color: var(--cyan);
-  background: rgba(0, 212, 255, 0.06);
+  border-color: var(--primary-300);
+  color: var(--primary-600);
+  box-shadow: var(--shadow-lg);
+}
+
+.skip-tts-btn:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: 2px;
 }
 
 @keyframes skip-in {
@@ -319,20 +350,22 @@
   to   { opacity: 1; transform: none; }
 }
 
+/* ── Answer Textarea ── */
 .answer-input {
   width: 100%;
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   line-height: 1.7;
   padding: 16px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-200);
+  background: var(--bg);
   color: var(--text-1);
   resize: vertical;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
   min-height: 180px;
+  transition: border-color 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out);
 }
 
 .answer-input::placeholder {
@@ -340,10 +373,16 @@
 }
 
 .answer-input:focus {
-  border-color: rgba(0, 212, 255, 0.3);
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.08);
+  border-color: var(--primary-400);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
+.answer-input.recording {
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+}
+
+/* ── Answer Meta Row ── */
 .answer-meta {
   display: flex;
   align-items: center;
@@ -355,57 +394,58 @@
 .word-count {
   font-size: 12px;
   color: var(--text-3);
+  font-weight: 500;
 }
 
-/* ── Mic button ── */
+/* ── Mic Button ── */
 .mic-btn {
   display: flex;
   align-items: center;
   gap: 7px;
   padding: 8px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: transparent;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-200);
+  background: var(--surface);
   color: var(--text-3);
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s var(--ease-out);
 }
 
 .mic-btn:hover {
-  border-color: rgba(0, 212, 255, 0.3);
-  color: var(--cyan);
+  border-color: var(--primary-300);
+  color: var(--primary-600);
+  background: var(--primary-50);
+}
+
+.mic-btn:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: 2px;
 }
 
 .mic-btn.active {
-  border-color: rgba(255, 77, 106, 0.35);
-  background: rgba(255, 77, 106, 0.07);
-  color: #ff4d6a;
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.04);
+  color: var(--error);
 }
 
 .mic-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #ff4d6a;
+  background: var(--error);
   animation: mic-pulse 1s ease-in-out infinite;
   flex-shrink: 0;
 }
 
 @keyframes mic-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.75); }
+  50%      { opacity: 0.5; transform: scale(0.75); }
 }
 
-/* Highlight textarea border while recording */
-.answer-input.recording {
-  border-color: rgba(255, 77, 106, 0.3);
-  box-shadow: 0 0 0 3px rgba(255, 77, 106, 0.07);
-}
-
-/* Navigation */
+/* ── Navigation ── */
 .interview-nav {
   display: flex;
   align-items: center;
@@ -425,26 +465,31 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--gray-300);
   background: transparent;
-  transition: all 0.2s;
+  transition: all 0.25s var(--ease-out);
   flex-shrink: 0;
+  cursor: pointer;
+}
+
+.nav-dot:hover {
+  border-color: var(--primary-300);
 }
 
 .nav-dot.current {
-  border-color: var(--cyan);
-  background: var(--cyan);
-  box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+  border-color: var(--primary-500);
+  background: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 
 .nav-dot.past {
-  border-color: rgba(52, 211, 153, 0.5);
-  background: rgba(52, 211, 153, 0.3);
+  border-color: var(--primary-300);
+  background: var(--primary-200);
 }
 
 .nav-dot.answered.current {
-  border-color: var(--cyan);
-  background: var(--cyan);
+  border-color: var(--primary-500);
+  background: var(--primary-500);
 }
 
 .submit-btn:disabled {
@@ -452,14 +497,14 @@
   cursor: not-allowed;
 }
 
-/* ── Camera layout ── */
+/* ── Camera Layout ── */
 
 /* Widen container when camera is active */
 .interview:has(.interview-body.camera-active) {
   max-width: 1100px;
 }
 
-/* Two-column grid when camera on, single col otherwise */
+/* Grid: single column default, two columns with camera */
 .interview-body {
   display: grid;
   grid-template-columns: 1fr;
@@ -471,27 +516,31 @@
   align-items: start;
 }
 
-/* Camera pane */
+/* ── Camera Pane ── */
 .camera-pane {
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   position: sticky;
   top: 100px;
   display: flex;
   flex-direction: column;
+  transition: box-shadow 0.3s var(--ease-out);
+}
+
+.camera-pane:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .camera-feed {
   width: 100%;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   transform: scaleX(-1);
   display: block;
-  background: #000;
+  background: var(--gray-100);
 }
 
 .camera-toggle-btn {
@@ -501,18 +550,25 @@
   color: var(--text-3);
   background: none;
   border: none;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--gray-200);
   cursor: pointer;
-  transition: color 0.2s;
   text-align: center;
   font-family: 'Inter', sans-serif;
+  transition: color 0.25s var(--ease-out),
+              background 0.25s var(--ease-out);
 }
 
 .camera-toggle-btn:hover {
   color: var(--text-1);
+  background: var(--gray-50);
 }
 
-/* Inline "Turn on camera" button above textarea */
+.camera-toggle-btn:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: -2px;
+}
+
+/* ── Inline Camera Button ── */
 .camera-on-inline-btn {
   display: flex;
   align-items: center;
@@ -521,23 +577,34 @@
   width: 100%;
   padding: 10px;
   margin-bottom: 12px;
-  border-radius: 10px;
-  border: 1px dashed var(--border);
-  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--gray-300);
+  background: var(--gray-50);
   color: var(--text-3);
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.25s var(--ease-out),
+              color 0.25s var(--ease-out),
+              background 0.25s var(--ease-out);
 }
 
 .camera-on-inline-btn:hover {
-  border-color: rgba(0, 212, 255, 0.3);
-  color: var(--cyan);
+  border-color: var(--primary-400);
+  color: var(--primary-600);
+  background: var(--primary-50);
 }
 
-/* Responsive — stack on narrow screens */
+.camera-on-inline-btn:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════ */
+
 @media (max-width: 900px) {
   .interview-body.camera-active {
     grid-template-columns: 1fr;
@@ -546,9 +613,53 @@
   .camera-pane {
     max-width: 280px;
     margin: 0 auto;
+    position: static;
   }
 
   .interview:has(.interview-body.camera-active) {
     max-width: 780px;
+  }
+}
+
+@media (max-width: 640px) {
+  .interview {
+    padding: 80px 16px 40px;
+  }
+
+  .question-card {
+    padding: 24px 20px;
+    border-radius: var(--radius-lg);
+  }
+
+  .question-text {
+    font-size: 18px;
+  }
+
+  .interview-top {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .timer {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+
+  .question-meta {
+    flex-wrap: wrap;
+  }
+
+  .q-time-limit {
+    margin-left: 0;
+  }
+
+  .skip-tts-btn {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .answer-input {
+    min-height: 140px;
+    font-size: 14px;
   }
 }
