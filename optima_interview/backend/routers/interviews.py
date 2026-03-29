@@ -340,22 +340,13 @@ def _create_matches(db: Session, session: models.InterviewSession, candidate: mo
 
 def _create_applications(db: Session, session: models.InterviewSession, candidate: models.User, answers):
     """
-    For connecting interviews: score against the candidate's favourited active jobs
-    and create Application records.
+    For connecting interviews: score against all active jobs in the same industry
+    and create Application records for matches scoring >= 40.
     """
-    favourites = (
-        db.query(models.Favourite)
-        .filter(models.Favourite.candidate_user_id == candidate.id)
-        .all()
-    )
-    if not favourites:
-        return
-
-    favourite_job_ids = [f.job_id for f in favourites]
     active_jobs = (
         db.query(models.JobPosting)
         .filter(
-            models.JobPosting.id.in_(favourite_job_ids),
+            models.JobPosting.industry == session.industry,
             models.JobPosting.is_active == True,
         )
         .all()
