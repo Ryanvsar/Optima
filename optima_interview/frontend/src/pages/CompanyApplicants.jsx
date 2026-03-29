@@ -6,6 +6,11 @@ import './CompanyApplicants.css'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
+const resolveUrl = (url) => {
+  if (!url) return null
+  return url.startsWith('http') ? url : `${API}${url}`
+}
+
 function scoreColor(score) {
   if (score >= 80) return 'score-green'
   if (score >= 65) return 'score-yellow'
@@ -80,9 +85,7 @@ export default function CompanyApplicants() {
     }
   }
 
-  const avatarSrc = (app) => app.profile_picture_url
-    ? `${API}/${app.profile_picture_url}`
-    : null
+  const avatarSrc = (app) => resolveUrl(app.candidate_profile_picture_url)
 
   return (
     <div className="site">
@@ -211,8 +214,8 @@ export default function CompanyApplicants() {
                   </div>
                   {(() => {
                     const pdfUrl = selected.resume_is_tailored
-                      ? (selected.tailored_resume_filename ? `${API}${selected.tailored_resume_filename}` : null)
-                      : (selected.candidate_resume_filename ? `${API}${selected.candidate_resume_filename}` : null)
+                      ? resolveUrl(selected.tailored_resume_filename)
+                      : resolveUrl(selected.candidate_resume_filename)
                     return pdfUrl ? (
                       <embed src={pdfUrl} type="application/pdf" className="ca-resume-embed" />
                     ) : selected.candidate_resume_text ? (
@@ -233,7 +236,7 @@ export default function CompanyApplicants() {
                   <div className="ca-section">
                     <div className="ca-section-title">Cover Letter</div>
                     {selected.cover_letter_filename ? (
-                      <embed src={`${API}${selected.cover_letter_filename}`} type="application/pdf" className="ca-resume-embed" />
+                      <embed src={resolveUrl(selected.cover_letter_filename)} type="application/pdf" className="ca-resume-embed" />
                     ) : (
                       <>
                         <button className="ca-toggle-btn" onClick={() => setShowCover((v) => !v)}>
