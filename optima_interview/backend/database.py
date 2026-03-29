@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text as _text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
@@ -37,3 +37,16 @@ def get_db():
 def init_db():
     from models import Base  # noqa: F401 — ensures all models are registered
     Base.metadata.create_all(bind=engine)
+
+    # Column migrations — add new columns to existing tables without full schema reset.
+    # Each statement is idempotent; safe to run on every cold start.
+    _migrations = [
+        "ALTER TABLE job_postings ADD COLUMN IF NOT EXISTS location VARCHAR",
+    ]
+    with engine.connect() as conn:
+        for stmt in _migrations:
+            try:
+                conn.execute(_text(stmt))
+            except Exception:
+                pass
+        conn.commit()
