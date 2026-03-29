@@ -261,7 +261,7 @@ export default function CompanyApplicants() {
                       label="Interview Performance"
                       pct={40}
                       value={selected.interview_performance_score}
-                      color="var(--cyan)"
+                      color="var(--primary-500)"
                     />
                     <ScoreBar
                       label="Answer Relevance"
