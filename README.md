@@ -1,4 +1,4 @@
-# Optima — AI-Powered Hiring Platform
+# Optima | AI-Powered Hiring Platform
 
 **Live:** [optima-interview.vercel.app](https://optima-interview.vercel.app)
 **Repo:** [github.com/Ryanvsar/Optima](https://github.com/Ryanvsar/Optima)
