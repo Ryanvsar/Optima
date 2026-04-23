@@ -35,7 +35,7 @@ Optima changes the traditional job application process with AI interviews. Candi
 
 ### For Companies
 
-- **Job Postings** — Companies can create detailed job postings covering title, industry, description, responsibilities, required skills, education/experience requirements, salary range, work term, start date, hours type, job level, and up to 5 company-specific interview questions that get injected into the AI question generation.
+- **Job Postings** — Companies can create detailed job postings covering title, industry, description, responsibilities, required skills, education/experience requirements, salary range, work term, start date, hours type, job level, and up to 3 company-specific interview questions that get injected into the AI question generation.
 
 - **Ranked Applicants** — Each job posting shows applicants ranked by their compatibility score. Companies can view a full score breakdown (overall score, interview performance, answer relevance, skills match, and resume ATS score), read the AI's reasoning for the match, and update a candidate's status (applied → viewed → contacted).
 
