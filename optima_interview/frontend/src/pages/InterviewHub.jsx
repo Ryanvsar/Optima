@@ -352,10 +352,10 @@ export default function InterviewHub() {
               <div className="hub-content">
                 {/* Start button at top */}
                 <div className="hub-tab-action">
+                  {/* RESTORE: onClick={handleConnectClick} disabled={!canConnect} */}
                   <button
                     className={`btn-interview-hub btn-connect-hub ${!canConnect ? 'disabled' : ''}`}
-                    onClick={handleConnectClick}
-                    disabled={!canConnect}
+                    onClick={() => alert('Interviews are currently disabled')}
                   >
                     Start Connecting Interview
                     <span className="btn-shimmer" />
@@ -417,9 +417,10 @@ export default function InterviewHub() {
               <div className="hub-content">
                 {/* Start button at top */}
                 <div className="hub-tab-action">
+                  {/* RESTORE: onClick={() => { setMockIndustry(''); setMockRole(''); setShowMockModal(true) }} */}
                   <button
                     className="btn-interview-hub btn-mock-hub"
-                    onClick={() => { setMockIndustry(''); setMockRole(''); setShowMockModal(true) }}
+                    onClick={() => alert('Interviews are currently disabled')}
                   >
                     Start Mock Interview
                     <span className="btn-shimmer" />
@@ -471,17 +472,18 @@ export default function InterviewHub() {
 
         {/* ── Bottom action bar ── */}
         <div className="hub-bottom-bar">
+          {/* RESTORE: onClick={() => { setMockIndustry(''); setMockRole(''); setShowMockModal(true) }} */}
           <button
             className="btn-interview-hub btn-mock-hub"
-            onClick={() => { setMockIndustry(''); setMockRole(''); setShowMockModal(true) }}
+            onClick={() => alert('Interviews are currently disabled')}
           >
             Start Mock Interview
             <span className="btn-shimmer" />
           </button>
+          {/* RESTORE: onClick={handleConnectClick} disabled={!canConnect} */}
           <button
             className={`btn-interview-hub btn-connect-hub ${!canConnect ? 'disabled' : ''}`}
-            onClick={handleConnectClick}
-            disabled={!canConnect}
+            onClick={() => alert('Interviews are currently disabled')}
           >
             Start Connecting Interview
             <span className="btn-shimmer" />

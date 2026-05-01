@@ -94,9 +94,10 @@ function JobCard({ job, isFavourited, onToggleFavourite, onMockInterview, onSele
       )}
 
       <div className="job-card-actions">
+        {/* RESTORE: onClick={(e) => { e.stopPropagation(); onMockInterview(job) }} */}
         <button
           className="btn-ghost-sm"
-          onClick={(e) => { e.stopPropagation(); onMockInterview(job) }}
+          onClick={(e) => { e.stopPropagation(); alert('Interviews are currently disabled') }}
         >
           Practice Interview
         </button>
@@ -222,7 +223,8 @@ function JobDetailModal({ job, isFavourited, onToggleFavourite, onMockInterview,
         </div>
 
         <div className="jdm-actions">
-          <button className="btn-ghost-sm" onClick={() => { onMockInterview(job); onClose() }}>
+          {/* RESTORE: onClick={() => { onMockInterview(job); onClose() }} */}
+          <button className="btn-ghost-sm" onClick={() => { alert('Interviews are currently disabled'); onClose() }}>
             Practice Interview
           </button>
           <button
@@ -536,17 +538,18 @@ export default function JobPostingsPage() {
                 )}
               </div>
               <div className="fav-interview-btns">
+                {/* RESTORE: onClick={startConnecting} disabled={!connectAvail?.can_connect || favouriteIds.size === 0} */}
                 <button
                   className={`btn-interview btn-connect ${!connectAvail?.can_connect || favouriteIds.size === 0 ? 'disabled' : ''}`}
-                  onClick={startConnecting}
-                  disabled={!connectAvail?.can_connect || favouriteIds.size === 0}
+                  onClick={() => alert('Interviews are currently disabled')}
                 >
                   Start Connecting Interview
                   <span className="btn-shimmer" />
                 </button>
+                {/* RESTORE: onClick={() => { setPrefilledJob(null); setMockIndustry(''); setMockRole(''); setShowMockModal(true) }} */}
                 <button
                   className="btn-interview btn-mock"
-                  onClick={() => { setPrefilledJob(null); setMockIndustry(''); setMockRole(''); setShowMockModal(true) }}
+                  onClick={() => alert('Interviews are currently disabled')}
                 >
                   Start Mock Interview
                   <span className="btn-shimmer" />
