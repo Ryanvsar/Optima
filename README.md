@@ -158,7 +158,7 @@ optima_interview/
 - An **OpenAI API key** (required for text-to-speech; mock interviews will work without it but TTS will fail)
 
 ### 1. Clone the repository
-
+ 
 ```bash
 git clone https://github.com/Ryanvsar/Optima.git
 cd Optima/optima_interview
