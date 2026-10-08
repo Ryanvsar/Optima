@@ -2,7 +2,7 @@
 
 **Live:** [optima-interview.vercel.app](https://optima-interview.vercel.app)
 
-Optima changes the traditional job application process with AI interviews. Candidates complete a weekly connecting interview and are automatically matched to companies whose job postings fit their answers, skills, and resume. No initial cover letters, no cold applications. Companies receive a ranked list of compatible candidates without sifting through hundreds of unqualified submissions. 
+Optima changes the traditional job application process with AI interviews. Candidates complete a weekly connecting interview and are automatically matched to companies whose job postings fit their answers, skills, and resume. No initial cover letters, no cold applications. Companies receive a ranked list of compatible candidates without sifting through hundreds of unqualified submissions.
 
 ---
 
