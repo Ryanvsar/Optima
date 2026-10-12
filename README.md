@@ -305,3 +305,4 @@ Rahul designed and built the entire client-side experience.
 - **Company profile** — Built the company profile editor with logo upload and the in-browser image crop/zoom modal (reused for candidate avatars)
 - **Navbar & auth context** — Built the role-aware persistent navigation and the global authentication context that persists JWT tokens across sessions
 - **Design system** — Established the full CSS custom property design system (colors, typography, spacing, shadows, border radii, easing curves) used consistently across all pages
+ 
