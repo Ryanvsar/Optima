@@ -304,4 +304,4 @@ Rahul designed and built the entire client-side experience.
 - **Company dashboard & applicants** — Built the company job management views including job creation/editing forms with all extended fields, the ranked applicant list with score breakdowns and status controls, and the employer dashboard with the candidate score guide and matching explainer
 - **Company profile** — Built the company profile editor with logo upload and the in-browser image crop/zoom modal (reused for candidate avatars)
 - **Navbar & auth context** — Built the role-aware persistent navigation and the global authentication context that persists JWT tokens across sessions
-- **Design system** — Established the full CSS custom property design system (colors, typography, spacing, shadows, border radii, easing curves) used consistently across all pages
+- **Design system** — Established the full CSS custom property design system (colors, typography, spacing, shadows, border radii, easing curves) used consistently across all pages 
