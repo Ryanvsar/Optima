@@ -10,7 +10,7 @@ Optima changes the traditional job application process with AI interviews. Candi
 
 1. [What It Does](#what-it-does)
 2. [How the Matching Works](#how-the-matching-works)
-3. [Tech Stack](#tech-stack)
+3. [Tech Stack](#tech-stack) 
 4. [Project Structure](#project-structure)
 5. [Local Setup](#local-setup)
 6. [Environment Variables](#environment-variables)
